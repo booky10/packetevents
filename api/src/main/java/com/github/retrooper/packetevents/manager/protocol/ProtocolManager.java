@@ -104,7 +104,12 @@ public interface ProtocolManager {
         PacketWrapper<?>[] wrappers = PacketTransformationUtil.transform(wrapper);
         Object[] buffers = new Object[wrappers.length];
         for (int i = 0; i < wrappers.length; i++) {
-            wrappers[i].prepareForSend(channel, outgoing);
+            try {
+                wrappers[i].prepareForSend(channel, outgoing);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                continue;
+            }
             buffers[i] = wrappers[i].buffer;
             // Fix race condition when sending packets to multiple people (due to when the buffer is freed)
             wrappers[i].buffer = null;
