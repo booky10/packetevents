@@ -70,9 +70,9 @@ public class PacketEventsDecoder extends MessageToMessageDecoder<ByteBuf> {
         //Check if the minecraft server will already print our exception for us.
         //Don't print errors during handshake
         if (ExceptionUtil.isException(cause, PacketProcessException.class)
-                && !SpigotReflectionUtil.isMinecraftServerInstanceDebugging()
+                && (true || !SpigotReflectionUtil.isMinecraftServerInstanceDebugging())
                 && (user != null && user.getDecoderState() != ConnectionState.HANDSHAKING)) {
-            if (PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
+            if (true || PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
                 cause.printStackTrace();
             } else {
                 PacketEvents.getAPI().getLogManager().warn(cause.getMessage());

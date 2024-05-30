@@ -113,11 +113,11 @@ public class PacketEventsEncoder extends MessageToMessageEncoder<ByteBuf> {
             return;
         }
 
-        boolean didWeCauseThis = ExceptionUtil.isException(cause, PacketProcessException.class);
+        boolean didWeCauseThis = true; // yes
 
         if (didWeCauseThis && user != null && user.getEncoderState() != ConnectionState.HANDSHAKING) {
             // Ignore handshaking exceptions
-            if (PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
+            if (true || PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
                 cause.printStackTrace();
             } else {
                 PacketEvents.getAPI().getLogManager().warn(cause.getMessage());
