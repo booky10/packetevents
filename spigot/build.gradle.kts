@@ -27,6 +27,9 @@ tasks {
         manifest {
             attributes["paperweight-mappings-namespace"] = "mojang"
         }
+
+        relocate("net.kyori.adventure.text.serializer",
+            "io.github.retrooper.packetevents.adventure.serializer")
     }
 
     // 1.8.8 - 1.16.5 = Java 8

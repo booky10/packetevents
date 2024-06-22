@@ -11,7 +11,6 @@ tasks {
         archiveFileName = "packetevents-${project.name}-${project.version}.jar"
         archiveClassifier = null
 
-        relocate("net.kyori.adventure.text.serializer", "io.github.retrooper.packetevents.adventure.serializer")
         relocate("net.kyori.option", "io.github.retrooper.packetevents.adventure.option")
         dependencies {
             exclude(dependency("com.google.code.gson:gson:.*"))

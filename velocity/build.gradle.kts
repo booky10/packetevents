@@ -28,4 +28,10 @@ tasks {
             languageVersion = JavaLanguageVersion.of(21)
         }
     }
+
+    shadowJar {
+        sequenceOf("gson", "json", "legacy").forEach {
+            relocate("net.kyori.adventure.text.serializer.$it", "io.github.retrooper.packetevents.adventure.serializer.$it")
+        }
+    }
 }
