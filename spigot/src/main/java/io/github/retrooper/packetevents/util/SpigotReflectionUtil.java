@@ -307,7 +307,7 @@ public final class SpigotReflectionUtil {
 
     private static void initClasses() {
         // spigot / paper versions older than 1.20.5 use spigot mappings
-        IS_OBFUSCATED = Reflection.getClassByNameWithoutException("net.minecraft.server.network.PlayerConnection") != null;
+        IS_OBFUSCATED = getServerClass("server.network.PlayerConnection", "PlayerConnection") != null;
 
         MINECRAFT_SERVER_CLASS = getServerClass("server.MinecraftServer", "MinecraftServer");
         NMS_PACKET_DATA_SERIALIZER_CLASS = getServerClass(IS_OBFUSCATED ? "network.PacketDataSerializer" : "network.FriendlyByteBuf", "PacketDataSerializer");
