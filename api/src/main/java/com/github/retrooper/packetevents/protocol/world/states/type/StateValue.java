@@ -21,6 +21,7 @@ package com.github.retrooper.packetevents.protocol.world.states.type;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Attachment;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Axis;
+import com.github.retrooper.packetevents.protocol.world.states.enums.CreakingHeartState;
 import com.github.retrooper.packetevents.protocol.world.states.enums.East;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Face;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Half;
@@ -93,6 +94,7 @@ public enum StateValue {
     LEAVES("leaves", Leaves.class, Leaves::valueOf),
     LEVEL("level", int.class, Integer::parseInt),
     LIT("lit", boolean.class, Boolean::parseBoolean),
+    TIP("tip", boolean.class, Boolean::parseBoolean),
     LOCKED("locked", boolean.class, Boolean::parseBoolean),
     MODE("mode", Mode.class, Mode::valueOf),
     MOISTURE("moisture", int.class, Integer::parseInt),
@@ -132,7 +134,8 @@ public enum StateValue {
     VAULT_STATE("vault_state", VaultState.class, VaultState::valueOf),
     VERTICAL_DIRECTION("vertical_direction", VerticalDirection.class, VerticalDirection::valueOf),
     WATERLOGGED("waterlogged", boolean.class, Boolean::parseBoolean),
-    WEST("west", West.class, West::valueOf);
+    WEST("west", West.class, West::valueOf),
+    CREAKING("creaking", CreakingHeartState.class, CreakingHeartState::valueOf);
 
     public static final Index<String, StateValue> NAME_INDEX = Index.create(
             StateValue.class, StateValue::getName);

@@ -15,6 +15,7 @@ import com.github.retrooper.packetevents.protocol.world.BlockFace;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Attachment;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Axis;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Bloom;
+import com.github.retrooper.packetevents.protocol.world.states.enums.CreakingHeartState;
 import com.github.retrooper.packetevents.protocol.world.states.enums.East;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Face;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Half;
@@ -941,6 +942,16 @@ public class WrappedBlockState {
         checkIsStillValid();
     }
 
+    public boolean isTip() {
+        return (boolean) data.get(StateValue.TIP);
+    }
+
+    public void setTip(boolean tip) {
+        checkIfCloneNeeded();
+        data.put(StateValue.TIP, tip);
+        checkIsStillValid();
+    }
+
     public boolean isLocked() {
         return (boolean) data.get(StateValue.LOCKED);
     }
@@ -1368,6 +1379,16 @@ public class WrappedBlockState {
     public void setTrialSpawnerState(TrialSpawnerState trialSpawnerState) {
         checkIfCloneNeeded();
         data.put(StateValue.TRIAL_SPAWNER_STATE, trialSpawnerState);
+        checkIsStillValid();
+    }
+
+    public CreakingHeartState getCreaking() {
+        return (CreakingHeartState) data.get(StateValue.CREAKING);
+    }
+
+    public void setCreaking(CreakingHeartState creakingHeartState) {
+        checkIfCloneNeeded();
+        data.put(StateValue.CREAKING, creakingHeartState);
         checkIsStillValid();
     }
 
