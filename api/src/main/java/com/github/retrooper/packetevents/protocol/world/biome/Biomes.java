@@ -138,6 +138,9 @@ public final class Biomes {
     public static final Biome WINDSWEPT_SAVANNA = define("windswept_savanna");
     public static final Biome WOODED_BADLANDS = define("wooded_badlands");
 
+    // added with 1.21.2
+    public static final Biome PALE_GARDEN = define("pale_garden");
+
     static {
         BIOME_DATA.clear();
         REGISTRY.unloadMappings();

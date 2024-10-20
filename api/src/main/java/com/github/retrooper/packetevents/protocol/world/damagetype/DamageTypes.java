@@ -50,7 +50,7 @@ public class DamageTypes {
 
     @ApiStatus.Internal
     public static DamageType define(String key, String messageId, DamageScaling scaling, float exhaustion,
-            DamageEffects damageEffects, DeathMessageType deathMessageType) {
+                                    DamageEffects damageEffects, DeathMessageType deathMessageType) {
         return REGISTRY.define(key,
                 data -> new StaticDamageType(data, messageId, scaling, exhaustion, damageEffects, deathMessageType));
     }
@@ -119,6 +119,11 @@ public class DamageTypes {
     public static final DamageType WIND_CHARGE = define("wind_charge", "mob", 0.1F);
     public static final DamageType WITHER = define("wither", "wither", 0.0F);
     public static final DamageType WITHER_SKULL = define("wither_skull", "witherSkull", 0.1F);
+
+    // added with 1.21.2
+    public static final DamageType ENDER_PEARL = define("ender_pearl", "fall", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
+            0.0F, DamageEffects.HURT, DeathMessageType.FALL_VARIANTS);
+    public static final DamageType MACE_SMASH = define("mace_smash", "mace_smash", 0.1F);
 
     /**
      * Returns an immutable view of the damagetypes.

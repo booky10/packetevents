@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlayServerUpdateAttributes> {
@@ -155,7 +156,7 @@ public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlay
             if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
                 this.writeVarInt(property.getAttribute().getId(this.serverVersion.toClientVersion()));
             } else if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_16)) {
-                this.writeIdentifier(property.getAttribute().getName());
+                this.writeIdentifier(property.getAttribute().getName(this.serverVersion.toClientVersion()));
             } else {
                 this.writeString(PRE_1_16_ATTRIBUTES_RMAP.get(property.getAttribute()));
             }
@@ -284,6 +285,7 @@ public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlay
         private Attribute attribute;
         private double value;
         private List<PropertyModifier> modifiers;
+        private transient Double calculatedValue = null;
 
         @Deprecated
         public Property(String key, double value, List<PropertyModifier> modifiers) {
@@ -294,6 +296,34 @@ public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlay
             this.attribute = attribute;
             this.value = value;
             this.modifiers = modifiers;
+        }
+
+        public double calcValue() {
+            if (this.calculatedValue == null) {
+                this.calculatedValue = this.calcValue0();
+            }
+            return this.calculatedValue;
+        }
+
+        public double calcValue0() {
+            double base = this.getValue();
+            for (PropertyModifier modifier : this.modifiers) {
+                if (modifier.getOperation() == PropertyModifier.Operation.ADDITION) {
+                    base += modifier.getAmount();
+                }
+            }
+            double value = base;
+            for (PropertyModifier modifier : this.modifiers) {
+                if (modifier.getOperation() == PropertyModifier.Operation.MULTIPLY_BASE) {
+                    value += base * modifier.getAmount();
+                }
+            }
+            for (PropertyModifier modifier : this.modifiers) {
+                if (modifier.getOperation() == PropertyModifier.Operation.MULTIPLY_TOTAL) {
+                    value *= 1d + modifier.getAmount();
+                }
+            }
+            return this.attribute.sanitizeValue(value);
         }
 
         public Attribute getAttribute() {
@@ -320,6 +350,33 @@ public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlay
 
         public void setValue(double value) {
             this.value = value;
+            this.setDirty();
+        }
+
+        public void addModifier(PropertyModifier modifier) {
+            this.modifiers.add(modifier);
+            this.setDirty();
+        }
+
+        public boolean removeModifier(ResourceLocation modifierId) {
+            return this.removeModifierIf(modifier -> modifierId.equals(modifier.getName()));
+        }
+
+        @ApiStatus.Obsolete
+        public boolean removeModifier(UUID modifierId) {
+            return this.removeModifierIf(modifier -> modifierId.equals(modifier.getUUID()));
+        }
+
+        @ApiStatus.Obsolete
+        public boolean removeModifier(ResourceLocation modifierId, UUID modifierUId) {
+            return this.removeModifierIf(modifier -> modifierUId.equals(modifier.getUUID())
+                    || modifierId.equals(modifier.getName()));
+        }
+
+        public boolean removeModifierIf(Predicate<PropertyModifier> predicate) {
+            boolean ret = this.modifiers.removeIf(predicate);
+            if (ret) this.setDirty();
+            return ret;
         }
 
         public List<PropertyModifier> getModifiers() {
@@ -328,6 +385,11 @@ public class WrapperPlayServerUpdateAttributes extends PacketWrapper<WrapperPlay
 
         public void setModifiers(List<PropertyModifier> modifiers) {
             this.modifiers = modifiers;
+            this.setDirty();
+        }
+
+        public void setDirty() {
+            this.calculatedValue = null;
         }
     }
 }

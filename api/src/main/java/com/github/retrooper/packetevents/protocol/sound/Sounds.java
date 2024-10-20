@@ -23,6 +23,7 @@ import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.util.mappings.MappingHelper;
 import com.github.retrooper.packetevents.util.mappings.TypesBuilder;
 import com.github.retrooper.packetevents.util.mappings.TypesBuilderData;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -711,6 +712,10 @@ public class Sounds {
     public static final Sound ENTITY_GOAT_PREPARE_RAM = define("entity.goat.prepare_ram");
     public static final Sound ENTITY_GOAT_RAM_IMPACT = define("entity.goat.ram_impact");
     public static final Sound ENTITY_GOAT_HORN_BREAK = define("entity.goat.horn_break");
+    /**
+     * Removed with 1.21.2
+     */
+    @ApiStatus.Obsolete
     public static final Sound ITEM_GOAT_HORN_PLAY = define("item.goat_horn.play");
     public static final Sound ENTITY_GOAT_SCREAMING_AMBIENT = define("entity.goat.screaming.ambient");
     public static final Sound ENTITY_GOAT_SCREAMING_DEATH = define("entity.goat.screaming.death");
@@ -720,6 +725,10 @@ public class Sounds {
     public static final Sound ENTITY_GOAT_SCREAMING_MILK = define("entity.goat.screaming.milk");
     public static final Sound ENTITY_GOAT_SCREAMING_PREPARE_RAM = define("entity.goat.screaming.prepare_ram");
     public static final Sound ENTITY_GOAT_SCREAMING_RAM_IMPACT = define("entity.goat.screaming.ram_impact");
+    /**
+     * Removed with 1.21.2
+     */
+    @ApiStatus.Obsolete
     public static final Sound ENTITY_GOAT_SCREAMING_HORN_BREAK = define("entity.goat.screaming.horn_break");
     public static final Sound ENTITY_GOAT_STEP = define("entity.goat.step");
     public static final Sound BLOCK_GRASS_BREAK = define("block.grass.break");
@@ -1718,8 +1727,38 @@ public class Sounds {
     public static final Sound MUSIC_DISC_PRECIPICE = define("music_disc.precipice");
     public static final Sound BLOCK_VAULT_REJECT_REWARDED_PLAYER = define("block.vault.reject_rewarded_player");
 
+    // added with 1.21.2
+    public static final Sound UI_HUD_BUBBLE_POP = define("ui.hud.bubble_pop");
+    public static final Sound ITEM_BUNDLE_INSERT_FAIL = define("item.bundle.insert_fail");
+    public static final Sound ENTITY_CREAKING_AMBIENT = define("entity.creaking.ambient");
+    public static final Sound ENTITY_CREAKING_ACTIVATE = define("entity.creaking.activate");
+    public static final Sound ENTITY_CREAKING_DEACTIVATE = define("entity.creaking.deactivate");
+    public static final Sound ENTITY_CREAKING_ATTACK = define("entity.creaking.attack");
+    public static final Sound ENTITY_CREAKING_DEATH = define("entity.creaking.death");
+    public static final Sound ENTITY_CREAKING_STEP = define("entity.creaking.step");
+    public static final Sound ENTITY_CREAKING_FREEZE = define("entity.creaking.freeze");
+    public static final Sound ENTITY_CREAKING_UNFREEZE = define("entity.creaking.unfreeze");
+    public static final Sound ENTITY_CREAKING_SPAWN = define("entity.creaking.spawn");
+    public static final Sound ENTITY_CREAKING_SWAY = define("entity.creaking.sway");
+    public static final Sound BLOCK_CREAKING_HEART_BREAK = define("block.creaking_heart.break");
+    public static final Sound BLOCK_CREAKING_HEART_FALL = define("block.creaking_heart.fall");
+    public static final Sound BLOCK_CREAKING_HEART_HIT = define("block.creaking_heart.hit");
+    public static final Sound BLOCK_CREAKING_HEART_HURT = define("block.creaking_heart.hurt");
+    public static final Sound BLOCK_CREAKING_HEART_PLACE = define("block.creaking_heart.place");
+    public static final Sound BLOCK_CREAKING_HEART_STEP = define("block.creaking_heart.step");
+    public static final Sound BLOCK_CREAKING_HEART_IDLE = define("block.creaking_heart.idle");
+    public static final Sound BLOCK_CREAKING_HEART_SPAWN = define("block.creaking_heart.spawn");
+    public static final Sound BLOCK_PALE_HANGING_MOSS_IDLE = define("block.pale_hanging_moss.idle");
+    public static final Sound ENTITY_PARROT_IMITATE_CREAKING = define("entity.parrot.imitate.creaking");
+    public static final Sound BLOCK_SPAWNER_BREAK = define("block.spawner.break");
+    public static final Sound BLOCK_SPAWNER_FALL = define("block.spawner.fall");
+    public static final Sound BLOCK_SPAWNER_HIT = define("block.spawner.hit");
+    public static final Sound BLOCK_SPAWNER_PLACE = define("block.spawner.place");
+    public static final Sound BLOCK_SPAWNER_STEP = define("block.spawner.step");
+
     /**
      * Returns an immutable view of the sounds.
+     *
      * @return Sounds
      */
     public static Collection<Sound> values() {

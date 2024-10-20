@@ -27,6 +27,7 @@ import com.github.retrooper.packetevents.protocol.particle.data.ParticleDustData
 import com.github.retrooper.packetevents.protocol.particle.data.ParticleItemStackData;
 import com.github.retrooper.packetevents.protocol.particle.data.ParticleSculkChargeData;
 import com.github.retrooper.packetevents.protocol.particle.data.ParticleShriekData;
+import com.github.retrooper.packetevents.protocol.particle.data.ParticleTrailData;
 import com.github.retrooper.packetevents.protocol.particle.data.ParticleVibrationData;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
@@ -272,6 +273,14 @@ public class ParticleTypes {
     public static final ParticleType<ParticleData> OMINOUS_SPAWNING = define("ominous_spawning");
     public static final ParticleType<ParticleData> RAID_OMEN = define("raid_omen");
     public static final ParticleType<ParticleData> TRIAL_OMEN = define("trial_omen");
+
+    // added with 1.21.2
+    public static final ParticleType<ParticleTrailData> TRAIL = define("trail",
+            ParticleTrailData::read, ParticleTrailData::write,
+            ParticleTrailData::decode, ParticleTrailData::encode);
+    public static final ParticleType<ParticleBlockStateData> BLOCK_CRUMBLE = define("block_crumble",
+            ParticleBlockStateData::read, ParticleBlockStateData::write,
+            ParticleBlockStateData::decode, ParticleBlockStateData::encode);
 
     /**
      * Returns an immutable view of the particle types.

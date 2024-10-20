@@ -258,35 +258,38 @@ public class WrappedBlockState {
     }
 
     private static byte getMappingsIndex(ClientVersion version) {
-        if (version.isOlderThan(ClientVersion.V_1_13)) {
+        if (version.isOlderThan(ClientVersion.V_1_13_2)) {
             return 0;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_13_1)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_14)) {
             return 1;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_13_2)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_15)) {
             return 2;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_14_4)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_16)) {
             return 3;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_15_2)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_16_2)) {
             return 4;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_16_1)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_17)) {
             return 5;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_16_4)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_19)) {
             return 6;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_18_2)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_19_3)) {
             return 7;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_19_1)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_19_4)) {
             return 8;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_19_3)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_20)) {
             return 9;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_19_4)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_20_2)) {
             return 10;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_20)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_20_3)) {
             return 11;
-        } else if (version.isOlderThanOrEquals(ClientVersion.V_1_20_2)) {
+        } else if (version.isOlderThan(ClientVersion.V_1_20_5)) {
             return 12;
+        } else if (version.isOlderThan(ClientVersion.V_1_21_2)) {
+            return 13;
+        } else {
+            // TODO add on update
+            return 127;
         }
-        // TODO UPDATE increment index (and add previous above)
-        return 13;
     }
 
     private static void loadLegacy(Map<BinaryNBTCompound, Map.Entry<Map<StateValue, Object>, String>> cache) {

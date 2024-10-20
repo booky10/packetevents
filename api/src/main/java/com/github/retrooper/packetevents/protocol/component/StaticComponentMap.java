@@ -22,6 +22,7 @@ import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemAtt
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEnchantments;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemLore;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRarity;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -33,6 +34,8 @@ import java.util.Optional;
 public class StaticComponentMap implements IComponentMap {
 
     public static final StaticComponentMap EMPTY = new StaticComponentMap(Collections.emptyMap());
+
+    @ApiStatus.Obsolete
     public static final StaticComponentMap SHARED_ITEM_COMPONENTS = builder()
             .set(ComponentTypes.MAX_STACK_SIZE, 64)
             .set(ComponentTypes.LORE, ItemLore.EMPTY)
@@ -98,7 +101,7 @@ public class StaticComponentMap implements IComponentMap {
 
     @Override
     public String toString() {
-        return "StaticComponentMap{empty=" + this.empty + ", delegate=" + this.delegate + '}';
+        return "Components" + this.delegate;
     }
 
     public static class Builder {
@@ -110,6 +113,10 @@ public class StaticComponentMap implements IComponentMap {
 
         public StaticComponentMap build() {
             return new StaticComponentMap(this.map);
+        }
+
+        public Builder setAll(StaticComponentMap.Builder map) {
+            return this.setAll(map.map);
         }
 
         public Builder setAll(StaticComponentMap map) {

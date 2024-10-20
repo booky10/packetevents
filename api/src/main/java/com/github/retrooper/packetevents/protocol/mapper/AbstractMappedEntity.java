@@ -76,4 +76,9 @@ public abstract class AbstractMappedEntity implements MappedEntity {
         }
         return super.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "[" + (this.data == null ? this.hashCode() : this.data.getName()) + ']';
+    }
 }

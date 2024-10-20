@@ -31,21 +31,31 @@ import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemAdv
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemAttributeModifiers;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemBees;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemBlockStateProperties;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemConsumable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemContainerContents;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemContainerLoot;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemDamageResistant;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemDeathProtection;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemDyeColor;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEnchantable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEnchantments;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemFireworks;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemJukeboxPlayable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemLock;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemLore;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMapDecorations;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMapPostProcessingState;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemModel;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemPotionContents;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemProfile;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRarity;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRecipes;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRepairable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTool;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTooltipStyle;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemUseCooldown;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemUseRemainder;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.LodestoneTracker;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.PotDecorations;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.SuspiciousStewEffects;
@@ -145,6 +155,10 @@ public final class ComponentTypes {
             Dummy::dummyReadNbt, Dummy::dummyWriteNbt);
     public static final ComponentType<FoodProperties> FOOD = define("food",
             FoodProperties::read, FoodProperties::write);
+    /**
+     * Has been migrated to #DAMAGE_RESISTANT with 1.21.2.
+     */
+    @ApiStatus.Obsolete
     public static final ComponentType<Dummy> FIRE_RESISTANT = define("fire_resistant",
             Dummy::dummyRead, Dummy::dummyWrite);
     public static final ComponentType<ItemTool> TOOL = define("tool",
@@ -219,6 +233,30 @@ public final class ComponentTypes {
     // added in 1.21
     public static final ComponentType<ItemJukeboxPlayable> JUKEBOX_PLAYABLE = define("jukebox_playable",
             ItemJukeboxPlayable::read, ItemJukeboxPlayable::write);
+
+    // added in 1.21.2
+    public static final ComponentType<ItemConsumable> CONSUMABLE = define("consumable",
+            ItemConsumable::read, ItemConsumable::write);
+    public static final ComponentType<ItemUseRemainder> USE_REMAINDER = define("use_remainder",
+            ItemUseRemainder::read, ItemUseRemainder::write);
+    public static final ComponentType<ItemUseCooldown> USE_COOLDOWN = define("use_cooldown",
+            ItemUseCooldown::read, ItemUseCooldown::write);
+    public static final ComponentType<ItemEnchantable> ENCHANTABLE = define("enchantable",
+            ItemEnchantable::read, ItemEnchantable::write);
+    public static final ComponentType<ItemRepairable> REPAIRABLE = define("repairable",
+            ItemRepairable::read, ItemRepairable::write);
+    public static final ComponentType<ItemModel> ITEM_MODEL = define("item_model",
+            ItemModel::read, ItemModel::write);
+    public static final ComponentType<ItemDamageResistant> DAMAGE_RESISTANT = define("damage_resistant",
+            ItemDamageResistant::read, ItemDamageResistant::write);
+    public static final ComponentType<ItemEquippable> EQUIPPABLE = define("equippable",
+            ItemEquippable::read, ItemEquippable::write);
+    public static final ComponentType<Dummy> GLIDER = define("glider",
+            Dummy::dummyRead, Dummy::dummyWrite);
+    public static final ComponentType<ItemDeathProtection> DEATH_PROTECTION = define("death_protection",
+            ItemDeathProtection::read, ItemDeathProtection::write);
+    public static final ComponentType<ItemTooltipStyle> TOOLTIP_STYLE = define("tooltip_style",
+            ItemTooltipStyle::read, ItemTooltipStyle::write);
 
     /**
      * Returns an immutable view of the component types.

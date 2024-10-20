@@ -19,21 +19,21 @@
 package com.github.retrooper.packetevents.protocol.particle.data;
 
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.color.AlphaColor;
 import com.github.retrooper.packetevents.protocol.nbt.NBT;
 import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
-import com.github.retrooper.packetevents.protocol.nbt.NBTInt;
-import com.github.retrooper.packetevents.protocol.nbt.NBTNumber;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 
-import static com.github.retrooper.packetevents.protocol.particle.data.ParticleDustData.decodeColor;
-import static com.github.retrooper.packetevents.util.MathUtil.floor;
-
 public class ParticleColorData extends ParticleData {
 
-    private int color;
+    private AlphaColor color;
 
     public ParticleColorData(int color) {
+        this(new AlphaColor(color));
+    }
+
+    public ParticleColorData(AlphaColor color) {
         this.color = color;
     }
 
@@ -44,42 +44,37 @@ public class ParticleColorData extends ParticleData {
 
     public static void write(PacketWrapper<?> wrapper, ParticleColorData data) {
         if (wrapper.getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
-            wrapper.writeInt(data.color);
+            wrapper.writeInt(data.color.asRGB());
         }
     }
 
     public static ParticleColorData decode(NBTCompound compound, ClientVersion version) {
-        int argb;
+        AlphaColor argb;
         if (version.isNewerThanOrEquals(ClientVersion.V_1_20_5)) {
             NBT colorTag = compound.getTagOrThrow("color");
-            if (colorTag instanceof NBTNumber) {
-                argb = ((NBTNumber) colorTag).getAsInt();
-            } else {
-                float[] color = decodeColor(colorTag);
-                assert color.length == 4; // required by vanilla protocol
-                argb = (floor(color[0] * 255f) << 24)
-                        | (floor(color[1] * 255f) << 16)
-                        | (floor(color[2] * 255f) << 8)
-                        | floor(color[3] * 255f);
-            }
+            argb = AlphaColor.decode(colorTag, version);
         } else {
             // no data to decode for <1.20.5
-            argb = 0xFFFFFFFF;
+            argb = AlphaColor.WHITE;
         }
         return new ParticleColorData(argb);
     }
 
     public static void encode(ParticleColorData data, ClientVersion version, NBTCompound compound) {
         if (version.isNewerThanOrEquals(ClientVersion.V_1_20_5)) {
-            compound.setTag("color", new NBTInt(data.color));
+            compound.setTag("color", AlphaColor.encode(data.color, version));
         }
     }
 
     public int getColor() {
-        return this.color;
+        return this.color.asRGB();
     }
 
     public void setColor(int color) {
+        this.color = new AlphaColor(color);
+    }
+
+    public void setAlphaColor(AlphaColor color) {
         this.color = color;
     }
 

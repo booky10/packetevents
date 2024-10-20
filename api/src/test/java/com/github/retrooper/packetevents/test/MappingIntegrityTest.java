@@ -5,6 +5,7 @@ import com.github.retrooper.packetevents.protocol.item.enchantment.type.Enchantm
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.world.biome.Biomes;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.enums.Axis;
 import com.github.retrooper.packetevents.protocol.world.states.enums.East;
 import com.github.retrooper.packetevents.protocol.world.states.enums.North;
 import com.github.retrooper.packetevents.protocol.world.states.enums.Orientation;
@@ -78,5 +79,10 @@ public class MappingIntegrityTest extends BaseDummyAPITest {
         WrappedBlockState heavyCoreState = StateTypes.HEAVY_CORE.createBlockState(ClientVersion.V_1_20_5);
         heavyCoreState.setWaterlogged(true);
         assertEquals(26682, heavyCoreState.getGlobalId());
+
+        assertEquals(158, StateTypes.PALE_OAK_LOG.createBlockState(ClientVersion.V_1_21_2).getGlobalId());
+        WrappedBlockState state = StateTypes.PALE_OAK_LOG.createBlockState(ClientVersion.V_1_21_2);
+        state.setAxis(Axis.Z);
+        assertEquals(159, state.getGlobalId());
     }
 }

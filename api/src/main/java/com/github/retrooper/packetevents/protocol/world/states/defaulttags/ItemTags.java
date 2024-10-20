@@ -18,6 +18,7 @@
 
 package com.github.retrooper.packetevents.protocol.world.states.defaulttags;
 
+import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
@@ -99,6 +100,10 @@ public class ItemTags {
     public static final ItemTags CHEST_BOATS = bind("chest_boats");
     public static final ItemTags FISHES = bind("fishes");
     public static final ItemTags SIGNS = bind("signs");
+    /**
+     * @deprecated This tag has been removed in 1.21.2 because of components
+     */
+    @Deprecated
     public static final ItemTags MUSIC_DISCS = bind("music_discs");
     public static final ItemTags CREEPER_DROP_MUSIC_DISCS = bind("creeper_drop_music_discs");
     public static final ItemTags COALS = bind("coals");
@@ -186,6 +191,32 @@ public class ItemTags {
     public static final ItemTags TURTLE_FOOD = bind("turtle_food");
     public static final ItemTags WOLF_FOOD = bind("wolf_food");
 
+    // added with 1.21.2
+    public static final ItemTags PALE_OAK_LOGS = bind("pale_oak_logs");
+    public static final ItemTags PIGLIN_SAFE_ARMOR = bind("piglin_safe_armor");
+    public static final ItemTags DUPLICATES_ALLAYS = bind("duplicates_allays");
+    public static final ItemTags BREWING_FUEL = bind("brewing_fuel");
+    public static final ItemTags SHULKER_BOXES = bind("shulker_boxes");
+    public static final ItemTags IRON_TOOL_MATERIALS = bind("iron_tool_materials");
+    public static final ItemTags GOLD_TOOL_MATERIALS = bind("gold_tool_materials");
+    public static final ItemTags DIAMOND_TOOL_MATERIALS = bind("diamond_tool_materials");
+    public static final ItemTags NETHERITE_TOOL_MATERIALS = bind("netherite_tool_materials");
+    public static final ItemTags REPAIRS_LEATHER_ARMOR = bind("repairs_leather_armor");
+    public static final ItemTags REPAIRS_CHAIN_ARMOR = bind("repairs_chain_armor");
+    public static final ItemTags REPAIRS_IRON_ARMOR = bind("repairs_iron_armor");
+    public static final ItemTags REPAIRS_GOLD_ARMOR = bind("repairs_gold_armor");
+    public static final ItemTags REPAIRS_DIAMOND_ARMOR = bind("repairs_diamond_armor");
+    public static final ItemTags REPAIRS_NETHERITE_ARMOR = bind("repairs_netherite_armor");
+    public static final ItemTags REPAIRS_TURTLE_HELMET = bind("repairs_turtle_helmet");
+    public static final ItemTags REPAIRS_WOLF_ARMOR = bind("repairs_wolf_armor");
+    public static final ItemTags FURNACE_MINECART_FUEL = bind("furnace_minecart_fuel");
+    public static final ItemTags BUNDLES = bind("bundles");
+    public static final ItemTags MAP_INVISIBILITY_EQUIPMENT = bind("map_invisibility_equipment");
+    public static final ItemTags GAZE_DISGUISE_EQUIPMENT = bind("gaze_disguise_equipment");
+    public static final ItemTags PANDA_EATS_FROM_GROUND = bind("panda_eats_from_ground");
+    public static final ItemTags WOODEN_TOOL_MATERIALS = bind("wooden_tool_materials");
+    public static final ItemTags VILLAGER_PICKS_UP = bind("villager_picks_up");
+
     static {
         copy(BlockTags.WOOL, ItemTags.WOOL);
         copy(BlockTags.PLANKS, ItemTags.PLANKS);
@@ -202,6 +233,7 @@ public class ItemTags {
         copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
         copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
         copy(BlockTags.DARK_OAK_LOGS, ItemTags.DARK_OAK_LOGS);
+        copy(BlockTags.PALE_OAK_LOGS, ItemTags.PALE_OAK_LOGS);
         copy(BlockTags.OAK_LOGS, ItemTags.OAK_LOGS);
         copy(BlockTags.BIRCH_LOGS, ItemTags.BIRCH_LOGS);
         copy(BlockTags.ACACIA_LOGS, ItemTags.ACACIA_LOGS);
@@ -225,6 +257,10 @@ public class ItemTags {
         copy(BlockTags.TALL_FLOWERS, ItemTags.TALL_FLOWERS);
         ItemTags.PIGLIN_REPELLENTS.add(ItemTypes.SOUL_TORCH, ItemTypes.SOUL_LANTERN, ItemTypes.SOUL_CAMPFIRE);
         ItemTags.IGNORED_BY_PIGLIN_BABIES.add(ItemTypes.LEATHER);
+        ItemTags.PIGLIN_SAFE_ARMOR.add(ItemTypes.GOLDEN_HELMET, ItemTypes.GOLDEN_CHESTPLATE, ItemTypes.GOLDEN_LEGGINGS, ItemTypes.GOLDEN_BOOTS);
+        ItemTags.DUPLICATES_ALLAYS.add(ItemTypes.AMETHYST_SHARD);
+        ItemTags.BREWING_FUEL.add(ItemTypes.BLAZE_POWDER);
+        copy(BlockTags.SHULKER_BOXES, ItemTags.SHULKER_BOXES);
         ItemTags.MEAT.add(ItemTypes.BEEF, ItemTypes.CHICKEN, ItemTypes.COOKED_BEEF, ItemTypes.COOKED_CHICKEN, ItemTypes.COOKED_MUTTON, ItemTypes.COOKED_PORKCHOP, ItemTypes.COOKED_RABBIT, ItemTypes.MUTTON, ItemTypes.PORKCHOP, ItemTypes.RABBIT, ItemTypes.ROTTEN_FLESH);
         ItemTags.SNIFFER_FOOD.add(ItemTypes.TORCHFLOWER_SEEDS);
         ItemTags.PIGLIN_FOOD.add(ItemTypes.PORKCHOP, ItemTypes.COOKED_PORKCHOP);
@@ -264,7 +300,7 @@ public class ItemTags {
         copy(BlockTags.CANDLES, ItemTags.CANDLES);
         copy(BlockTags.DIRT, ItemTags.DIRT);
         copy(BlockTags.TERRACOTTA, ItemTags.TERRACOTTA);
-        ItemTags.CHEST_BOATS.add(ItemTypes.OAK_CHEST_BOAT, ItemTypes.SPRUCE_CHEST_BOAT, ItemTypes.BIRCH_CHEST_BOAT, ItemTypes.JUNGLE_CHEST_BOAT, ItemTypes.ACACIA_CHEST_BOAT, ItemTypes.DARK_OAK_CHEST_BOAT, ItemTypes.MANGROVE_CHEST_BOAT, ItemTypes.BAMBOO_CHEST_RAFT, ItemTypes.CHERRY_CHEST_BOAT);
+        ItemTags.CHEST_BOATS.add(ItemTypes.OAK_CHEST_BOAT, ItemTypes.SPRUCE_CHEST_BOAT, ItemTypes.BIRCH_CHEST_BOAT, ItemTypes.JUNGLE_CHEST_BOAT, ItemTypes.ACACIA_CHEST_BOAT, ItemTypes.DARK_OAK_CHEST_BOAT, ItemTypes.MANGROVE_CHEST_BOAT, ItemTypes.BAMBOO_CHEST_RAFT, ItemTypes.CHERRY_CHEST_BOAT, ItemTypes.PALE_OAK_CHEST_BOAT);
         ItemTags.FISHES.add(ItemTypes.COD, ItemTypes.COOKED_COD, ItemTypes.SALMON, ItemTypes.COOKED_SALMON, ItemTypes.PUFFERFISH, ItemTypes.TROPICAL_FISH);
         copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
         ItemTags.CREEPER_DROP_MUSIC_DISCS.add(ItemTypes.MUSIC_DISC_13, ItemTypes.MUSIC_DISC_CAT, ItemTypes.MUSIC_DISC_BLOCKS, ItemTypes.MUSIC_DISC_CHIRP, ItemTypes.MUSIC_DISC_FAR, ItemTypes.MUSIC_DISC_MALL, ItemTypes.MUSIC_DISC_MELLOHI, ItemTypes.MUSIC_DISC_STAL, ItemTypes.MUSIC_DISC_STRAD, ItemTypes.MUSIC_DISC_WARD, ItemTypes.MUSIC_DISC_11, ItemTypes.MUSIC_DISC_WAIT);
@@ -274,6 +310,18 @@ public class ItemTags {
         ItemTags.BOOKSHELF_BOOKS.add(ItemTypes.BOOK, ItemTypes.WRITTEN_BOOK, ItemTypes.ENCHANTED_BOOK, ItemTypes.WRITABLE_BOOK, ItemTypes.KNOWLEDGE_BOOK);
         ItemTags.BEACON_PAYMENT_ITEMS.add(ItemTypes.NETHERITE_INGOT, ItemTypes.EMERALD, ItemTypes.DIAMOND, ItemTypes.GOLD_INGOT, ItemTypes.IRON_INGOT);
         ItemTags.STONE_TOOL_MATERIALS.add(ItemTypes.COBBLESTONE, ItemTypes.BLACKSTONE, ItemTypes.COBBLED_DEEPSLATE);
+        ItemTags.IRON_TOOL_MATERIALS.add(ItemTypes.IRON_INGOT);
+        ItemTags.GOLD_TOOL_MATERIALS.add(ItemTypes.GOLD_INGOT);
+        ItemTags.DIAMOND_TOOL_MATERIALS.add(ItemTypes.DIAMOND);
+        ItemTags.NETHERITE_TOOL_MATERIALS.add(ItemTypes.NETHERITE_INGOT);
+        copy(ItemTags.IGNORED_BY_PIGLIN_BABIES, ItemTags.REPAIRS_LEATHER_ARMOR);
+        copy(ItemTags.IRON_TOOL_MATERIALS, ItemTags.REPAIRS_CHAIN_ARMOR);
+        copy(ItemTags.IRON_TOOL_MATERIALS, ItemTags.REPAIRS_IRON_ARMOR);
+        copy(ItemTags.GOLD_TOOL_MATERIALS, ItemTags.REPAIRS_GOLD_ARMOR);
+        copy(ItemTags.DIAMOND_TOOL_MATERIALS, ItemTags.REPAIRS_DIAMOND_ARMOR);
+        copy(ItemTags.NETHERITE_TOOL_MATERIALS, ItemTags.REPAIRS_NETHERITE_ARMOR);
+        ItemTags.REPAIRS_TURTLE_HELMET.add(ItemTypes.TURTLE_SCUTE);
+        ItemTags.REPAIRS_WOLF_ARMOR.add(ItemTypes.ARMADILLO_SCUTE);
         copy(ItemTags.STONE_TOOL_MATERIALS, ItemTags.STONE_CRAFTING_MATERIALS);
         ItemTags.FREEZE_IMMUNE_WEARABLES.add(ItemTypes.LEATHER_BOOTS, ItemTypes.LEATHER_LEGGINGS, ItemTypes.LEATHER_CHESTPLATE, ItemTypes.LEATHER_HELMET, ItemTypes.LEATHER_HORSE_ARMOR);
         ItemTags.CLUSTER_MAX_HARVESTABLES.add(ItemTypes.DIAMOND_PICKAXE, ItemTypes.GOLDEN_PICKAXE, ItemTypes.IRON_PICKAXE, ItemTypes.NETHERITE_PICKAXE, ItemTypes.STONE_PICKAXE, ItemTypes.WOODEN_PICKAXE);
@@ -296,11 +344,15 @@ public class ItemTags {
         ItemTags.SHOVELS.add(ItemTypes.DIAMOND_SHOVEL, ItemTypes.STONE_SHOVEL, ItemTypes.GOLDEN_SHOVEL, ItemTypes.NETHERITE_SHOVEL, ItemTypes.WOODEN_SHOVEL, ItemTypes.IRON_SHOVEL);
         ItemTags.VILLAGER_PLANTABLE_SEEDS.add(ItemTypes.WHEAT_SEEDS, ItemTypes.POTATO, ItemTypes.CARROT, ItemTypes.BEETROOT_SEEDS, ItemTypes.TORCHFLOWER_SEEDS, ItemTypes.PITCHER_POD);
         ItemTags.DYEABLE.add(ItemTypes.LEATHER_HELMET, ItemTypes.LEATHER_CHESTPLATE, ItemTypes.LEATHER_LEGGINGS, ItemTypes.LEATHER_BOOTS, ItemTypes.LEATHER_HORSE_ARMOR, ItemTypes.WOLF_ARMOR);
+        copy(ItemTags.COALS, ItemTags.FURNACE_MINECART_FUEL);
+        ItemTags.BUNDLES.add(ItemTypes.BUNDLE, ItemTypes.BLACK_BUNDLE, ItemTypes.BLUE_BUNDLE, ItemTypes.BROWN_BUNDLE, ItemTypes.CYAN_BUNDLE, ItemTypes.GRAY_BUNDLE, ItemTypes.GREEN_BUNDLE, ItemTypes.LIGHT_BLUE_BUNDLE, ItemTypes.LIGHT_GRAY_BUNDLE, ItemTypes.LIME_BUNDLE, ItemTypes.MAGENTA_BUNDLE, ItemTypes.ORANGE_BUNDLE, ItemTypes.PINK_BUNDLE, ItemTypes.PURPLE_BUNDLE, ItemTypes.RED_BUNDLE, ItemTypes.YELLOW_BUNDLE, ItemTypes.WHITE_BUNDLE);
         ItemTags.ENCHANTABLE_FISHING.add(ItemTypes.FISHING_ROD);
         ItemTags.ENCHANTABLE_TRIDENT.add(ItemTypes.TRIDENT);
         ItemTags.ENCHANTABLE_BOW.add(ItemTypes.BOW);
         ItemTags.ENCHANTABLE_CROSSBOW.add(ItemTypes.CROSSBOW);
         ItemTags.ENCHANTABLE_MACE.add(ItemTypes.MACE);
+        ItemTags.MAP_INVISIBILITY_EQUIPMENT.add(ItemTypes.CARVED_PUMPKIN);
+        copy(ItemTags.MAP_INVISIBILITY_EQUIPMENT, ItemTags.GAZE_DISGUISE_EQUIPMENT);
         copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
         copy(BlockTags.DOORS, ItemTags.DOORS);
         copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
@@ -310,14 +362,16 @@ public class ItemTags {
         copy(BlockTags.FENCES, ItemTags.FENCES);
         copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
         ItemTags.PIGLIN_LOVED.addTag(ItemTags.GOLD_ORES).add(ItemTypes.GOLD_BLOCK, ItemTypes.GILDED_BLACKSTONE, ItemTypes.LIGHT_WEIGHTED_PRESSURE_PLATE, ItemTypes.GOLD_INGOT, ItemTypes.BELL, ItemTypes.CLOCK, ItemTypes.GOLDEN_CARROT, ItemTypes.GLISTERING_MELON_SLICE, ItemTypes.GOLDEN_APPLE, ItemTypes.ENCHANTED_GOLDEN_APPLE, ItemTypes.GOLDEN_HELMET, ItemTypes.GOLDEN_CHESTPLATE, ItemTypes.GOLDEN_LEGGINGS, ItemTypes.GOLDEN_BOOTS, ItemTypes.GOLDEN_HORSE_ARMOR, ItemTypes.GOLDEN_SWORD, ItemTypes.GOLDEN_PICKAXE, ItemTypes.GOLDEN_SHOVEL, ItemTypes.GOLDEN_AXE, ItemTypes.GOLDEN_HOE, ItemTypes.RAW_GOLD, ItemTypes.RAW_GOLD_BLOCK);
-        ItemTags.WOLF_FOOD.addTag(ItemTags.MEAT);
+        ItemTags.WOLF_FOOD.addTag(ItemTags.MEAT).add(ItemTypes.COD, ItemTypes.COOKED_COD, ItemTypes.SALMON, ItemTypes.COOKED_SALMON, ItemTypes.TROPICAL_FISH, ItemTypes.PUFFERFISH, ItemTypes.RABBIT_STEW);
+        ItemTags.PANDA_EATS_FROM_GROUND.addTag(ItemTags.PANDA_FOOD).add(ItemTypes.CAKE);
         ItemTags.STRIDER_TEMPT_ITEMS.addTag(ItemTags.STRIDER_FOOD).add(ItemTypes.WARPED_FUNGUS_ON_A_STICK);
-        ItemTags.BOATS.addTag(ItemTags.CHEST_BOATS).add(ItemTypes.OAK_BOAT, ItemTypes.SPRUCE_BOAT, ItemTypes.BIRCH_BOAT, ItemTypes.JUNGLE_BOAT, ItemTypes.ACACIA_BOAT, ItemTypes.DARK_OAK_BOAT, ItemTypes.MANGROVE_BOAT, ItemTypes.BAMBOO_RAFT, ItemTypes.CHERRY_BOAT);
-        ItemTags.MUSIC_DISCS.addTag(ItemTags.CREEPER_DROP_MUSIC_DISCS).add(ItemTypes.MUSIC_DISC_PIGSTEP, ItemTypes.MUSIC_DISC_OTHERSIDE, ItemTypes.MUSIC_DISC_5, ItemTypes.MUSIC_DISC_RELIC, ItemTypes.MUSIC_DISC_CREATOR, ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX, ItemTypes.MUSIC_DISC_PRECIPICE);
+        ItemTags.BOATS.addTag(ItemTags.CHEST_BOATS).add(ItemTypes.OAK_BOAT, ItemTypes.SPRUCE_BOAT, ItemTypes.BIRCH_BOAT, ItemTypes.JUNGLE_BOAT, ItemTypes.ACACIA_BOAT, ItemTypes.DARK_OAK_BOAT, ItemTypes.MANGROVE_BOAT, ItemTypes.BAMBOO_RAFT, ItemTypes.CHERRY_BOAT, ItemTypes.PALE_OAK_BOAT);
+        ItemTags.WOODEN_TOOL_MATERIALS.addTag(ItemTags.PLANKS);
         copy(BlockTags.DAMPENS_VIBRATIONS, ItemTags.DAMPENS_VIBRATIONS);
         ItemTags.TRIMMABLE_ARMOR.addTag(ItemTags.FOOT_ARMOR).addTag(ItemTags.LEG_ARMOR).addTag(ItemTags.CHEST_ARMOR).addTag(ItemTags.HEAD_ARMOR);
         ItemTags.DECORATED_POT_INGREDIENTS.addTag(ItemTags.DECORATED_POT_SHERDS).add(ItemTypes.BRICK);
         ItemTags.BREAKS_DECORATED_POTS.addTag(ItemTags.SWORDS).addTag(ItemTags.AXES).addTag(ItemTags.PICKAXES).addTag(ItemTags.SHOVELS).addTag(ItemTags.HOES).add(ItemTypes.TRIDENT, ItemTypes.MACE);
+        ItemTags.VILLAGER_PICKS_UP.addTag(ItemTags.VILLAGER_PLANTABLE_SEEDS).add(ItemTypes.BREAD, ItemTypes.WHEAT, ItemTypes.BEETROOT);
         ItemTags.ENCHANTABLE_FOOT_ARMOR.addTag(ItemTags.FOOT_ARMOR);
         ItemTags.ENCHANTABLE_LEG_ARMOR.addTag(ItemTags.LEG_ARMOR);
         ItemTags.ENCHANTABLE_CHEST_ARMOR.addTag(ItemTags.CHEST_ARMOR);
@@ -335,6 +389,13 @@ public class ItemTags {
         ItemTags.ENCHANTABLE_WEAPON.addTag(ItemTags.ENCHANTABLE_SHARP_WEAPON).add(ItemTypes.MACE);
         ItemTags.ENCHANTABLE_VANISHING.addTag(ItemTags.ENCHANTABLE_DURABILITY).addTag(ItemTags.SKULLS).add(ItemTypes.COMPASS, ItemTypes.CARVED_PUMPKIN);
         copy(BlockTags.COMPLETES_FIND_TREE_TUTORIAL, ItemTags.COMPLETES_FIND_TREE_TUTORIAL);
+
+        // deprecated tags
+        for (ItemType type : ItemTypes.getRegistry().getEntries()) {
+            if (type.getComponents().has(ComponentTypes.JUKEBOX_PLAYABLE)) {
+                ItemTags.MUSIC_DISCS.add(type);
+            }
+        }
     }
 
     String name;
