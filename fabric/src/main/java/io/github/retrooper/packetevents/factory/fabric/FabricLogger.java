@@ -22,10 +22,20 @@ import com.github.retrooper.packetevents.util.LogManager;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
-import java.util.logging.Level;
+import java.util.Map;
 
 public class FabricLogger extends LogManager {
+
+    private static final Map<java.util.logging.Level, Level> LEVEL_CONVERSION = Map.of(
+            java.util.logging.Level.FINEST, Level.TRACE,
+            java.util.logging.Level.FINER, Level.TRACE,
+            java.util.logging.Level.FINE, Level.DEBUG,
+            java.util.logging.Level.INFO, Level.INFO,
+            java.util.logging.Level.WARNING, Level.WARN,
+            java.util.logging.Level.SEVERE, Level.ERROR
+    );
 
     private final Logger logger;
 
@@ -34,9 +44,9 @@ public class FabricLogger extends LogManager {
     }
 
     @Override
-    protected void log(Level level, @Nullable NamedTextColor color, String message) {
+    protected void log(java.util.logging.Level level, @Nullable NamedTextColor color, String message) {
         String plainMessage = STRIP_COLOR_PATTERN.matcher(message).replaceAll("");
-        org.slf4j.event.Level logLevel = org.slf4j.event.Level.intToLevel(level.intValue());
+        Level logLevel = LEVEL_CONVERSION.getOrDefault(level, Level.INFO);
         this.logger.makeLoggingEventBuilder(logLevel).log(plainMessage);
     }
 }

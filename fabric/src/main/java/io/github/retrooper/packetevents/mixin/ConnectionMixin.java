@@ -22,6 +22,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.UserConnectEvent;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
+import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.protocol.player.UserProfile;
@@ -67,8 +68,9 @@ public class ConnectionMixin {
             return;
         }
 
-        channel.pipeline().addAfter("splitter", PacketEvents.DECODER_NAME, new PacketDecoder(user));
-        channel.pipeline().addAfter("prepender", PacketEvents.ENCODER_NAME, new PacketEncoder(user));
+        PacketSide side = PacketEvents.getAPI().getInjector().isServerBound() ? PacketSide.SERVER : PacketSide.CLIENT;
+        channel.pipeline().addAfter("splitter", PacketEvents.DECODER_NAME, new PacketDecoder(side, user));
+        channel.pipeline().addAfter("prepender", PacketEvents.ENCODER_NAME, new PacketEncoder(side, user));
         channel.closeFuture().addListener((ChannelFutureListener) future ->
                 PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
     }

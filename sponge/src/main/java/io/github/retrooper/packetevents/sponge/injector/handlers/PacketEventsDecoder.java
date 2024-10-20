@@ -56,8 +56,8 @@ public class PacketEventsDecoder extends MessageToMessageDecoder<ByteBuf> {
     }
 
     public void read(ChannelHandlerContext ctx, ByteBuf input, List<Object> out) throws Exception {
-        Object buffer = PacketEventsImplHelper.handleServerBoundPacket(ctx.channel(), user, player == null ? null : Sponge.server().player(player).orElse(null), input, true);
-        out.add(ByteBufHelper.retain(buffer));
+        PacketEventsImplHelper.handleServerBoundPacket(ctx.channel(), user, player == null ? null : Sponge.server().player(player).orElse(null), input, true);
+        out.add(ByteBufHelper.retain(input));
     }
 
     @Override

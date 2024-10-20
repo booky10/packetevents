@@ -18,6 +18,7 @@
 
 package io.github.retrooper.packetevents.handler;
 
+import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.PacketEventsImplHelper;
 import io.netty.buffer.ByteBuf;
@@ -31,10 +32,12 @@ import java.util.List;
 @ApiStatus.Internal
 public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 
+    private final PacketSide side;
     public User user;
     public Player player;
 
-    public PacketDecoder(User user) {
+    public PacketDecoder(PacketSide side, User user) {
+        this.side = side.getOpposite();
         this.user = user;
     }
 
@@ -43,8 +46,8 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
         if (!msg.isReadable()) {
             return;
         }
-        PacketEventsImplHelper.handleClientBoundPacket(ctx.channel(), this.user, this.player,
-                msg, false);
+        PacketEventsImplHelper.handlePacket(ctx.channel(), this.user, this.player,
+                msg, false, this.side);
         if (msg.isReadable()) {
             out.add(msg.retain());
         }

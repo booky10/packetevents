@@ -56,32 +56,35 @@ import com.github.retrooper.packetevents.wrapper.configuration.server.WrapperCon
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApiStatus.Internal
 public final class SynchronizedRegistriesHandler {
 
     private static final boolean FORCE_PER_USER_REGISTRIES = Boolean.getBoolean("packetevents.force-per-user-registries");
-    private static final Map<ResourceLocation, RegistryEntry<?>> REGISTRY_KEYS = Stream.of(
-            new RegistryEntry<>(Biomes.getRegistry(), Biome::decode),
-            new RegistryEntry<>(ChatTypes.getRegistry(), ChatType::decode),
-            new RegistryEntry<>(TrimPatterns.getRegistry(), TrimPattern::decode),
-            new RegistryEntry<>(TrimMaterials.getRegistry(), TrimMaterial::decode),
-            new RegistryEntry<>(WolfVariants.getRegistry(), WolfVariant::decode),
-            new RegistryEntry<>(PaintingVariants.getRegistry(), PaintingVariant::decode),
-            new RegistryEntry<>(DimensionTypes.getRegistry(), DimensionType::decode),
-            new RegistryEntry<>(DamageTypes.getRegistry(), DamageType::decode),
-            new RegistryEntry<>(BannerPatterns.getRegistry(), BannerPattern::decode),
-            new RegistryEntry<>(EnchantmentTypes.getRegistry(), EnchantmentType::decode),
-            new RegistryEntry<>(JukeboxSongs.getRegistry(), IJukeboxSong::decode),
-            new RegistryEntry<>(Instruments.getRegistry(), Instrument::decode)
-    ).collect(Collectors.toMap(RegistryEntry::getRegistryKey, Function.identity()));
+    private static final Map<ResourceLocation, RegistryEntry<?>> REGISTRY_KEYS = new HashMap<>();
+
+    static {
+        Stream.of(
+                new RegistryEntry<>(Biomes.getRegistry(), Biome::decode),
+                new RegistryEntry<>(ChatTypes.getRegistry(), ChatType::decode),
+                new RegistryEntry<>(TrimPatterns.getRegistry(), TrimPattern::decode),
+                new RegistryEntry<>(TrimMaterials.getRegistry(), TrimMaterial::decode),
+                new RegistryEntry<>(WolfVariants.getRegistry(), WolfVariant::decode),
+                new RegistryEntry<>(PaintingVariants.getRegistry(), PaintingVariant::decode),
+                new RegistryEntry<>(DimensionTypes.getRegistry(), DimensionType::decode),
+                new RegistryEntry<>(DamageTypes.getRegistry(), DamageType::decode),
+                new RegistryEntry<>(BannerPatterns.getRegistry(), BannerPattern::decode),
+                new RegistryEntry<>(EnchantmentTypes.getRegistry(), EnchantmentType::decode),
+                new RegistryEntry<>(JukeboxSongs.getRegistry(), IJukeboxSong::decode),
+                new RegistryEntry<>(Instruments.getRegistry(), Instrument::decode)
+        ).forEach(entry -> REGISTRY_KEYS.put(entry.getRegistryKey(), entry));
+    }
 
     private SynchronizedRegistriesHandler() {
     }

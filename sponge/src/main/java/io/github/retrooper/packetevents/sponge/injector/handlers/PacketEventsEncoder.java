@@ -36,6 +36,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.Sponge;
 
 import java.lang.reflect.InvocationTargetException;
@@ -77,9 +78,9 @@ public class PacketEventsEncoder extends MessageToMessageEncoder<ByteBuf> {
         list.add(byteBuf.retain());
     }
 
-    private PacketSendEvent handleClientBoundPacket(Channel channel, User user, UUID player, ByteBuf buffer, ChannelPromise promise) throws Exception {
+    private @Nullable PacketSendEvent handleClientBoundPacket(Channel channel, User user, UUID player, ByteBuf buffer, ChannelPromise promise) throws Exception {
         PacketSendEvent packetSendEvent = PacketEventsImplHelper.handleClientBoundPacket(channel, user, player == null ? null : Sponge.server().player(player).orElse(null), buffer, true);
-        if (packetSendEvent.hasTasksAfterSend()) {
+        if (packetSendEvent != null && packetSendEvent.hasTasksAfterSend()) {
             promise.addListener((p) -> {
                 for (Runnable task : packetSendEvent.getTasksAfterSend()) {
                     task.run();
