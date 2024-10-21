@@ -456,6 +456,9 @@ public class WrapperPlayServerJoinGame extends PacketWrapper<WrapperPlayServerJo
             int pCooldown = portalCooldown != null ? portalCooldown : 0;
             writeVarInt(pCooldown);
         }
+        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
+            this.writeVarInt(this.seaLevel);
+        }
         if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
             writeBoolean(enforcesSecureChat);
         }

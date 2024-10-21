@@ -51,8 +51,8 @@ public enum ClientboundPacketType_1_21_2 {
     DELETE_CHAT,
     DISCONNECT,
     DISGUISED_CHAT,
-    ENTITY_POSITION_SYNC, // new packet
     ENTITY_STATUS,
+    ENTITY_POSITION_SYNC, // new packet
     EXPLOSION,
     UNLOAD_CHUNK,
     CHANGE_GAME_STATE,

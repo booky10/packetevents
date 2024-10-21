@@ -20,6 +20,7 @@ package com.github.retrooper.packetevents.wrapper.play.server;
 
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.entity.EntityPositionData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.teleport.RelativeFlag;
 import com.github.retrooper.packetevents.protocol.world.Location;
@@ -35,12 +36,12 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
     private static final float ROTATION_FACTOR = 256.0F / 360.0F;
 
     private int entityID;
-    private Vector3d position;
     /**
-     * Added with 1.21.2
+     * Changed with 1.21.2
+     * <p>
+     * In versions before 1.21.2, the {@link EntityPositionData#getDeltaMovement()} will always be zero.
      */
-    private Vector3d deltaMovement;
-    private float yaw, pitch;
+    private EntityPositionData values;
     /**
      * Added with 1.21.2
      */
@@ -63,12 +64,15 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
             int entityID, Vector3d position, Vector3d deltaMovement,
             float yaw, float pitch, RelativeFlag relativeFlags, boolean onGround
     ) {
+        this(entityID, new EntityPositionData(position, deltaMovement, yaw, pitch), relativeFlags, onGround);
+    }
+
+    public WrapperPlayServerEntityTeleport(
+            int entityID, EntityPositionData values, RelativeFlag relativeFlags, boolean onGround
+    ) {
         super(PacketType.Play.Server.ENTITY_TELEPORT);
         this.entityID = entityID;
-        this.position = position;
-        this.deltaMovement = deltaMovement;
-        this.yaw = yaw;
-        this.pitch = pitch;
+        this.values = values;
         this.relativeFlags = relativeFlags;
         this.onGround = onGround;
     }
@@ -77,17 +81,15 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
     public void read() {
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
             this.entityID = this.readVarInt();
-            this.position = Vector3d.read(this);
-            this.deltaMovement = Vector3d.read(this);
-            this.yaw = this.readFloat();
-            this.pitch = this.readFloat();
+            this.values = EntityPositionData.read(this);
             this.relativeFlags = new RelativeFlag(this.readInt());
         } else {
             this.entityID = this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_8) ? this.readVarInt() : this.readInt();
-            this.position = this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9) ? Vector3d.read(this) :
+            Vector3d position = this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9) ? Vector3d.read(this) :
                     new Vector3d(this.readInt() / 32d, this.readInt() / 32d, this.readInt() / 32d);
-            this.yaw = this.readByte() / ROTATION_FACTOR;
-            this.pitch = this.readByte() / ROTATION_FACTOR;
+            float yaw = this.readByte() / ROTATION_FACTOR;
+            float pitch = this.readByte() / ROTATION_FACTOR;
+            this.values = new EntityPositionData(position, Vector3d.zero(), yaw, pitch);
         }
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_8)) {
             this.onGround = this.readBoolean();
@@ -98,10 +100,7 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
     public void write() {
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
             this.writeVarInt(this.entityID);
-            Vector3d.write(this, this.position);
-            Vector3d.write(this, this.deltaMovement);
-            this.writeFloat(this.yaw);
-            this.writeFloat(this.pitch);
+            EntityPositionData.write(this, this.values);
             this.writeInt(this.relativeFlags.getFullMask());
         } else {
             if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_8)) {
@@ -110,14 +109,15 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
                 this.writeInt(this.entityID);
             }
             if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9)) {
-                Vector3d.write(this, this.position);
+                Vector3d.write(this, this.values.getPosition());
             } else {
-                this.writeInt(MathUtil.floor(this.position.x * 32d));
-                this.writeInt(MathUtil.floor(this.position.y * 32d));
-                this.writeInt(MathUtil.floor(this.position.z * 32d));
+                Vector3d pos = this.values.getPosition();
+                this.writeInt(MathUtil.floor(pos.x * 32d));
+                this.writeInt(MathUtil.floor(pos.y * 32d));
+                this.writeInt(MathUtil.floor(pos.z * 32d));
             }
-            this.writeByte((int) (this.yaw * ROTATION_FACTOR));
-            this.writeByte((int) (this.pitch * ROTATION_FACTOR));
+            this.writeByte((int) (this.values.getYaw() * ROTATION_FACTOR));
+            this.writeByte((int) (this.values.getPitch() * ROTATION_FACTOR));
         }
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_8)) {
             this.writeBoolean(this.onGround);
@@ -127,10 +127,7 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
     @Override
     public void copy(WrapperPlayServerEntityTeleport wrapper) {
         this.entityID = wrapper.entityID;
-        this.position = wrapper.position;
-        this.deltaMovement = wrapper.deltaMovement;
-        this.yaw = wrapper.yaw;
-        this.pitch = wrapper.pitch;
+        this.values = wrapper.values;
         this.relativeFlags = wrapper.relativeFlags;
         this.onGround = wrapper.onGround;
     }
@@ -143,36 +140,44 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
         this.entityID = entityID;
     }
 
+    public EntityPositionData getValues() {
+        return this.values;
+    }
+
+    public void setValues(EntityPositionData values) {
+        this.values = values;
+    }
+
     public Vector3d getPosition() {
-        return this.position;
+        return this.values.getPosition();
     }
 
     public void setPosition(Vector3d position) {
-        this.position = position;
+        this.values.setPosition(position);
     }
 
     public Vector3d getDeltaMovement() {
-        return this.deltaMovement;
+        return this.values.getDeltaMovement();
     }
 
     public void setDeltaMovement(Vector3d deltaMovement) {
-        this.deltaMovement = deltaMovement;
+        this.values.setDeltaMovement(deltaMovement);
     }
 
     public float getYaw() {
-        return this.yaw;
+        return this.values.getYaw();
     }
 
     public void setYaw(float yaw) {
-        this.yaw = yaw;
+        this.values.setYaw(yaw);
     }
 
     public float getPitch() {
-        return this.pitch;
+        return this.values.getPitch();
     }
 
     public void setPitch(float pitch) {
-        this.pitch = pitch;
+        this.values.setPitch(pitch);
     }
 
     public RelativeFlag getRelativeFlags() {

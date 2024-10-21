@@ -2,6 +2,7 @@ package com.github.retrooper.packetevents.wrapper.play.server;
 
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.entity.EntityPositionData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.teleport.RelativeFlag;
 import com.github.retrooper.packetevents.util.Vector3d;
@@ -15,13 +16,12 @@ import org.jetbrains.annotations.ApiStatus;
 public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<WrapperPlayServerPlayerPositionAndLook> {
 
     private int teleportId;
-    private Vector3d position;
     /**
-     * Added with 1.21.2
+     * Changed with 1.21.2
+     * <p>
+     * In versions before 1.21.2, the {@link EntityPositionData#getDeltaMovement()} will always be zero.
      */
-    private Vector3d deltaMovement;
-    private float yaw;
-    private float pitch;
+    private EntityPositionData values;
     private RelativeFlag relativeFlags;
 
     /**
@@ -68,12 +68,15 @@ public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<Wrappe
             int teleportId, Vector3d position, Vector3d deltaMovement,
             float yaw, float pitch, RelativeFlag flags
     ) {
+        this(teleportId, new EntityPositionData(position, deltaMovement, yaw, pitch), flags);
+    }
+
+    public WrapperPlayServerPlayerPositionAndLook(
+            int teleportId, EntityPositionData values, RelativeFlag flags
+    ) {
         super(PacketType.Play.Server.PLAYER_POSITION_AND_LOOK);
         this.teleportId = teleportId;
-        this.position = position;
-        this.deltaMovement = deltaMovement;
-        this.yaw = yaw;
-        this.pitch = pitch;
+        this.values = values;
         this.relativeFlags = flags;
     }
 
@@ -81,16 +84,13 @@ public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<Wrappe
     public void read() {
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
             this.teleportId = this.readVarInt();
-            this.position = Vector3d.read(this);
-            this.deltaMovement = Vector3d.read(this);
-            this.yaw = this.readFloat();
-            this.pitch = this.readFloat();
+            this.values = EntityPositionData.read(this);
             this.relativeFlags = new RelativeFlag(this.readInt());
         } else {
-            this.position = Vector3d.read(this);
-            this.deltaMovement = Vector3d.zero();
-            this.yaw = this.readFloat();
-            this.pitch = this.readFloat();
+            Vector3d position = Vector3d.read(this);
+            float yaw = this.readFloat();
+            float pitch = this.readFloat();
+            this.values = new EntityPositionData(position, Vector3d.zero(), yaw, pitch);
             this.relativeFlags = new RelativeFlag(this.readUnsignedByte());
             if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9)) {
                 this.teleportId = this.readVarInt();
@@ -106,15 +106,12 @@ public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<Wrappe
     public void write() {
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_2)) {
             this.writeVarInt(this.teleportId);
-            Vector3d.write(this, this.position);
-            Vector3d.write(this, this.deltaMovement);
-            this.writeFloat(this.yaw);
-            this.writeFloat(this.pitch);
+            EntityPositionData.write(this, this.values);
             this.writeInt(this.relativeFlags.getFullMask());
         } else {
-            Vector3d.write(this, this.position);
-            this.writeFloat(this.yaw);
-            this.writeFloat(this.pitch);
+            Vector3d.write(this, this.values.getPosition());
+            this.writeFloat(this.values.getYaw());
+            this.writeFloat(this.values.getPitch());
             this.writeByte(this.relativeFlags.getFullMask());
             if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9)) {
                 this.writeVarInt(this.teleportId);
@@ -129,10 +126,7 @@ public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<Wrappe
     @Override
     public void copy(WrapperPlayServerPlayerPositionAndLook wrapper) {
         this.teleportId = wrapper.teleportId;
-        this.position = wrapper.position;
-        this.deltaMovement = wrapper.deltaMovement;
-        this.yaw = wrapper.yaw;
-        this.pitch = wrapper.pitch;
+        this.values = wrapper.values;
         this.relativeFlags = wrapper.relativeFlags;
         this.dismountVehicle = wrapper.dismountVehicle;
     }
@@ -145,60 +139,68 @@ public class WrapperPlayServerPlayerPositionAndLook extends PacketWrapper<Wrappe
         this.teleportId = teleportId;
     }
 
+    public EntityPositionData getValues() {
+        return this.values;
+    }
+
+    public void setValues(EntityPositionData values) {
+        this.values = values;
+    }
+
     public Vector3d getPosition() {
-        return this.position;
+        return this.values.getPosition();
     }
 
     public void setPosition(Vector3d position) {
-        this.position = position;
+        this.values.setPosition(position);
     }
 
     public double getX() {
-        return this.position.x;
+        return this.getPosition().getX();
     }
 
     public void setX(double x) {
-        this.position = new Vector3d(x, this.getY(), this.getZ());
+        this.setPosition(new Vector3d(x, this.getY(), this.getZ()));
     }
 
     public double getY() {
-        return this.position.y;
+        return this.getPosition().getY();
     }
 
     public void setY(double y) {
-        this.position = new Vector3d(this.getX(), y, this.getZ());
+        this.setPosition(new Vector3d(this.getX(), y, this.getZ()));
     }
 
     public double getZ() {
-        return this.position.z;
+        return this.getPosition().getZ();
     }
 
     public void setZ(double z) {
-        this.position = new Vector3d(this.getX(), this.getY(), z);
+        this.setPosition(new Vector3d(this.getX(), this.getY(), z));
     }
 
     public Vector3d getDeltaMovement() {
-        return this.deltaMovement;
+        return this.values.getDeltaMovement();
     }
 
     public void setDeltaMovement(Vector3d deltaMovement) {
-        this.deltaMovement = deltaMovement;
+        this.values.setDeltaMovement(deltaMovement);
     }
 
     public float getYaw() {
-        return this.yaw;
+        return this.values.getYaw();
     }
 
     public void setYaw(float yaw) {
-        this.yaw = yaw;
+        this.values.setYaw(yaw);
     }
 
     public float getPitch() {
-        return this.pitch;
+        return this.values.getPitch();
     }
 
     public void setPitch(float pitch) {
-        this.pitch = pitch;
+        this.values.setPitch(pitch);
     }
 
     /**

@@ -80,7 +80,8 @@ public class WrapperPlayClientCraftRecipeRequest extends PacketWrapper<WrapperPl
     @Override
     public void write() {
         this.writeContainerId(this.windowId);
-        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_13)) {
+        if (this.serverVersion.isOlderThan(ServerVersion.V_1_21_2)
+                && this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_13)) {
             this.writeIdentifier(this.recipeKey);
         } else {
             RecipeDisplayId.write(this, this.recipeId);
