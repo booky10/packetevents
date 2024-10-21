@@ -47,7 +47,8 @@ public class ServerConnectionInitializer {
         PacketEventsDecoder decoder = new PacketEventsDecoder(user);
         PacketEventsEncoder encoder = new PacketEventsEncoder(user);
         addChannelHandlers(channel, decoder, encoder);
-        channel.closeFuture().addListener((ChannelFutureListener) future -> PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
+        channel.closeFuture().addListener((ChannelFutureListener) future ->
+                PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID(), PacketEvents.getAPI()));
         PacketEvents.getAPI().getProtocolManager().setUser(channel, user);
     }
 

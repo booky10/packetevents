@@ -64,10 +64,16 @@ public final class PacketEvents {
     // setters
 
     public static void setServerAPI(PacketEventsAPI<?> api) {
+        if (!api.getInjector().isServerBound()) {
+            throw new IllegalStateException("Can't set non-server api as server api");
+        }
         SERVER_API = api;
     }
 
     public static void setClientAPI(PacketEventsAPI<?> api) {
+        if (api.getInjector().isServerBound()) {
+            throw new IllegalStateException("Can't set non-client api as client api");
+        }
         CLIENT_API = api;
     }
 

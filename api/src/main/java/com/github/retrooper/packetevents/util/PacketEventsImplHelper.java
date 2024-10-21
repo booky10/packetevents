@@ -18,7 +18,7 @@
 
 package com.github.retrooper.packetevents.util;
 
-import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.event.ProtocolPacketEvent;
@@ -38,18 +38,18 @@ public final class PacketEventsImplHelper {
 
     public static @Nullable ProtocolPacketEvent handlePacket(
             Object channel, User user, Object player, Object buffer,
-            boolean autoProtocolTranslation, PacketSide side
+            boolean autoProtocolTranslation, PacketEventsAPI<?> api, PacketSide side
     ) throws Exception {
         if (side == PacketSide.SERVER) {
-            return handleClientBoundPacket(channel, user, player, buffer, autoProtocolTranslation);
+            return handleClientBoundPacket(channel, user, player, buffer, autoProtocolTranslation, api);
         } else {
-            return handleServerBoundPacket(channel, user, player, buffer, autoProtocolTranslation);
+            return handleServerBoundPacket(channel, user, player, buffer, autoProtocolTranslation, api);
         }
     }
 
     public static @Nullable PacketSendEvent handleClientBoundPacket(
             Object channel, User user, Object player, Object buffer,
-            boolean autoProtocolTranslation
+            boolean autoProtocolTranslation, PacketEventsAPI<?> api
     ) throws Exception {
         if (!ByteBufHelper.isReadable(buffer)) {
             return null;
@@ -58,7 +58,7 @@ public final class PacketEventsImplHelper {
         int preProcessIndex = ByteBufHelper.readerIndex(buffer);
         PacketSendEvent packetSendEvent = EventCreationUtil.createSendEvent(channel, user, player, buffer, autoProtocolTranslation);
         int processIndex = ByteBufHelper.readerIndex(buffer);
-        PacketEvents.getAPI().getEventManager().callEvent(packetSendEvent, () -> {
+        api.getEventManager().callEvent(packetSendEvent, () -> {
             ByteBufHelper.readerIndex(buffer, processIndex);
         });
         if (!packetSendEvent.isCancelled()) {
@@ -89,7 +89,7 @@ public final class PacketEventsImplHelper {
 
     public static @Nullable PacketReceiveEvent handleServerBoundPacket(
             Object channel, User user, Object player, Object buffer,
-            boolean autoProtocolTranslation
+            boolean autoProtocolTranslation, PacketEventsAPI<?> api
     ) throws Exception {
         if (!ByteBufHelper.isReadable(buffer)) {
             return null;
@@ -98,7 +98,7 @@ public final class PacketEventsImplHelper {
         int preProcessIndex = ByteBufHelper.readerIndex(buffer);
         PacketReceiveEvent packetReceiveEvent = EventCreationUtil.createReceiveEvent(channel, user, player, buffer, autoProtocolTranslation);
         int processIndex = ByteBufHelper.readerIndex(buffer);
-        PacketEvents.getAPI().getEventManager().callEvent(packetReceiveEvent, () -> {
+        api.getEventManager().callEvent(packetReceiveEvent, () -> {
             ByteBufHelper.readerIndex(buffer, processIndex);
         });
         if (!packetReceiveEvent.isCancelled()) {
@@ -125,22 +125,26 @@ public final class PacketEventsImplHelper {
         return packetReceiveEvent;
     }
 
-    public static void handleDisconnection(Object channel, @Nullable UUID uuid) {
+    public static void handleDisconnection(
+            Object channel,
+            @Nullable UUID playerId,
+            PacketEventsAPI<?> api
+    ) {
         synchronized (channel) {
-            User user = PacketEvents.getAPI().getProtocolManager().getUser(channel);
+            User user = api.getProtocolManager().getUser(channel);
 
             if (user != null) {
                 UserDisconnectEvent disconnectEvent = new UserDisconnectEvent(user);
-                PacketEvents.getAPI().getEventManager().callEvent(disconnectEvent);
-                PacketEvents.getAPI().getProtocolManager().removeUser(user.getChannel());
+                api.getEventManager().callEvent(disconnectEvent);
+                api.getProtocolManager().removeUser(user.getChannel());
             }
 
-            if (uuid == null) {
+            if (playerId == null) {
                 // Only way to be sure of removing a channel
                 ProtocolManager.CHANNELS.entrySet().removeIf(pair -> pair.getValue() == channel);
             } else {
                 // This is the efficient way that we should prefer
-                ProtocolManager.CHANNELS.remove(uuid);
+                ProtocolManager.CHANNELS.remove(playerId);
             }
         }
     }

@@ -72,7 +72,8 @@ public class ServerConnectionInitializer {
 
             relocateHandlers(channel, null, user);
 
-            channel.closeFuture().addListener((ChannelFutureListener) future -> PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
+            channel.closeFuture().addListener((ChannelFutureListener) future ->
+                    PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID(), PacketEvents.getAPI()));
             PacketEvents.getAPI().getProtocolManager().setUser(channel, user);
         }
     }

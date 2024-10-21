@@ -51,7 +51,8 @@ public class ServerConnectionInitializer {
         //Order of these
         addChannelHandlers(channel, decoder, encoder);
 
-        channel.closeFuture().addListener((ChannelFutureListener) future -> PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
+        channel.closeFuture().addListener((ChannelFutureListener) future ->
+                PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID(), PacketEvents.getAPI()));
 
 
         //two methods is important.

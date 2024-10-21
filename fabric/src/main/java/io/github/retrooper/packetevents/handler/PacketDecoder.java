@@ -51,7 +51,8 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
             return;
         }
         PacketEventsImplHelper.handlePacket(ctx.channel(), this.user, this.player,
-                msg, false, this.side);
+                msg, false,
+                this.api, this.side);
         if (msg.isReadable()) {
             out.add(msg.retain());
         }

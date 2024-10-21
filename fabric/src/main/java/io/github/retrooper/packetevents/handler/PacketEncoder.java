@@ -56,7 +56,8 @@ public class PacketEncoder extends ChannelOutboundHandlerAdapter {
         }
 
         PacketEventsImplHelper.handlePacket(ctx.channel(),
-                this.user, this.player, in, false, this.side);
+                this.user, this.player, in, false,
+                this.api, this.side);
         if (in.isReadable()) {
             ctx.write(in, promise);
         }

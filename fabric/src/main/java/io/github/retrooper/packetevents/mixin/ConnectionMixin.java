@@ -79,6 +79,6 @@ public class ConnectionMixin {
         channel.pipeline().addAfter("prepender", PacketEvents.ENCODER_NAME,
                 new PacketEncoder(api, side, user));
         channel.closeFuture().addListener((ChannelFutureListener) future ->
-                PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
+                PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID(), api));
     }
 }
