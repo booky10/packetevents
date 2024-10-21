@@ -25,10 +25,13 @@ import net.fabricmc.api.EnvType;
 
 public class PacketEventsServerMod implements DedicatedServerModInitializer {
 
+    public static FabricPacketEventsAPI constructApi(String modid) {
+        return new FabricPacketEventsAPI(modid, EnvType.SERVER);
+    }
+
     @Override
     public void onInitializeServer() {
-        PacketEvents.setAPI(new FabricPacketEventsAPI(
-                "packetevents", EnvType.SERVER));
+        PacketEvents.setAPI(constructApi("packetevents"));
         PacketEvents.getAPI().load();
         PacketEvents.getAPI().init();
     }

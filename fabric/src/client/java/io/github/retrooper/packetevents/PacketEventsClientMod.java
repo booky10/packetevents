@@ -27,8 +27,8 @@ import net.fabricmc.api.EnvType;
 
 public class PacketEventsClientMod implements ClientModInitializer {
 
-    private FabricPacketEventsAPI constructApi() {
-        return new FabricPacketEventsAPI("packetevents", EnvType.CLIENT) {
+    public static FabricPacketEventsAPI constructApi(String modid) {
+        return new FabricPacketEventsAPI(modid, EnvType.CLIENT) {
             @Override
             protected PlayerManagerAbstract constructPlayerManager() {
                 return new FabricClientPlayerManager();
@@ -38,7 +38,7 @@ public class PacketEventsClientMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        PacketEvents.setAPI(this.constructApi());
+        PacketEvents.setAPI(constructApi("packetevents"));
         PacketEvents.getAPI().load();
         PacketEvents.getAPI().init();
     }
