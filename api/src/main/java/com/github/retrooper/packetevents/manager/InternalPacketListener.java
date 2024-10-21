@@ -24,6 +24,7 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
@@ -65,8 +66,9 @@ public class InternalPacketListener extends PacketListenerAbstract {
             user.getProfile().setTextureProperties(profile.getTextureProperties());
 
             //Map username with channel
-            synchronized (channel) {
-                ProtocolManager.CHANNELS.put(profile.getUUID(), channel);
+            ProtocolManager proto = PacketEvents.getAPI().getProtocolManager();
+            if (proto instanceof SimpleProtocolManager) {
+                ((SimpleProtocolManager) proto).channels.put(profile.getUUID(), channel);
             }
 
             PacketEvents.getAPI().getLogManager().debug("Mapped player UUID with their channel.");

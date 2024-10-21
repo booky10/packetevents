@@ -78,7 +78,7 @@ public class SpigotPacketEventsBuilder {
     public static PacketEventsAPI<Plugin> buildNoCache(Plugin plugin, PacketEventsSettings inSettings) {
         return new PacketEventsAPI<Plugin>() {
             private final PacketEventsSettings settings = inSettings;
-            private final ProtocolManager protocolManager = new ProtocolManagerImpl();
+            private final ProtocolManager protocolManager = new ProtocolManagerImpl(this);
             private final ServerManager serverManager = new ServerManagerImpl();
             private final PlayerManager playerManager = new PlayerManagerImpl();
             private final NettyManager nettyManager = new NettyManagerImpl();
@@ -216,7 +216,7 @@ public class SpigotPacketEventsBuilder {
                 if (initialized) {
                     //Uninject the injector if needed(depends on the injector implementation)
                     injector.uninject();
-                    for (User user : ProtocolManager.USERS.values()) {
+                    for (User user : this.protocolManager.getUsers()) {
                         ServerConnectionInitializer.destroyHandlers(user.getChannel());
                     }
                     //Unregister all listeners. Because if we attempt to reload, we will end up with duplicate listeners.

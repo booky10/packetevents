@@ -24,11 +24,13 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.event.ProtocolPacketEvent;
 import com.github.retrooper.packetevents.event.UserDisconnectEvent;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.netty.buffer.ByteBufHelper;
 import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.User;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
 
 public final class PacketEventsImplHelper {
@@ -130,21 +132,19 @@ public final class PacketEventsImplHelper {
             @Nullable UUID playerId,
             PacketEventsAPI<?> api
     ) {
-        synchronized (channel) {
-            User user = api.getProtocolManager().getUser(channel);
-
-            if (user != null) {
-                UserDisconnectEvent disconnectEvent = new UserDisconnectEvent(user);
-                api.getEventManager().callEvent(disconnectEvent);
-                api.getProtocolManager().removeUser(user.getChannel());
-            }
-
-            if (playerId == null) {
-                // Only way to be sure of removing a channel
-                ProtocolManager.CHANNELS.entrySet().removeIf(pair -> pair.getValue() == channel);
+        ProtocolManager proto = api.getProtocolManager();
+        User user = proto.getUser(channel);
+        if (user != null) {
+            UserDisconnectEvent disconnectEvent = new UserDisconnectEvent(user);
+            api.getEventManager().callEvent(disconnectEvent);
+            proto.removeUser(user.getChannel());
+        }
+        if (proto instanceof SimpleProtocolManager) {
+            Map<UUID, Object> channels = ((SimpleProtocolManager) proto).channels;
+            if (playerId != null) {
+                channels.remove(playerId); // more efficient
             } else {
-                // This is the efficient way that we should prefer
-                ProtocolManager.CHANNELS.remove(playerId);
+                channels.entrySet().removeIf(pair -> pair.getValue() == channel);
             }
         }
     }

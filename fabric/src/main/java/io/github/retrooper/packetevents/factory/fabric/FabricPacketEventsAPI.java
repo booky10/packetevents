@@ -49,7 +49,7 @@ public class FabricPacketEventsAPI extends PacketEventsAPI<FabricLoader> {
     private final PacketEventsSettings settings;
 
     //TODO Implement platform version
-    private final ProtocolManager protocolManager = new ProtocolManagerAbstract() {
+    private final ProtocolManager protocolManager = new ProtocolManagerAbstract(this) {
         @Override
         public ProtocolVersion getPlatformVersion() {
             return ProtocolVersion.UNKNOWN;

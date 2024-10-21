@@ -86,7 +86,7 @@ public class VelocityPacketEventsBuilder {
         return new PacketEventsAPI<PluginContainer>() {
             private final PacketEventsSettings settings = inSettings;
             // TODO Implement platform version
-            private final ProtocolManager protocolManager = new ProtocolManagerAbstract() {
+            private final ProtocolManager protocolManager = new ProtocolManagerAbstract(this) {
                 @Override
                 public com.github.retrooper.packetevents.protocol.ProtocolVersion getPlatformVersion() {
                     return com.github.retrooper.packetevents.protocol.ProtocolVersion.UNKNOWN;

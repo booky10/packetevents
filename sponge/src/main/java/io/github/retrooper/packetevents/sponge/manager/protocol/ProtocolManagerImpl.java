@@ -19,17 +19,26 @@
 package io.github.retrooper.packetevents.sponge.manager.protocol;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import com.github.retrooper.packetevents.protocol.ProtocolVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
 import io.netty.buffer.ByteBuf;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-public class ProtocolManagerImpl implements ProtocolManager {
+@ApiStatus.Internal
+public class ProtocolManagerImpl extends SimpleProtocolManager {
+
     private ProtocolVersion platformVersion;
+
+    public ProtocolManagerImpl(PacketEventsAPI<?> api) {
+        super(api);
+    }
 
     //TODO Implement
     private ProtocolVersion resolveVersionNoCache() {

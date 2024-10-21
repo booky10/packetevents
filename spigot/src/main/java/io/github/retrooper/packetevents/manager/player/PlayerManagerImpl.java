@@ -21,6 +21,7 @@ package io.github.retrooper.packetevents.manager.player;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.player.PlayerManager;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
@@ -72,16 +73,15 @@ public class PlayerManagerImpl implements PlayerManager {
     @Override
     public Object getChannel(@NotNull Object player) {
         UUID uuid = ((Player) player).getUniqueId();
-        Object channel = PacketEvents.getAPI().getProtocolManager().getChannel(uuid);
+        ProtocolManager proto = PacketEvents.getAPI().getProtocolManager();
+        Object channel = proto.getChannel(uuid);
         if (channel == null) {
             channel = SpigotReflectionUtil.getChannel((Player) player);
             // This is removed from the HashMap on channel close
             // So if the channel is already closed, there will be a memory leak if we add an offline player
             if (channel != null) {
-                synchronized (channel) {
-                    if (ChannelHelper.isOpen(channel)) {
-                        ProtocolManager.CHANNELS.put(uuid, channel);
-                    }
+                if (ChannelHelper.isOpen(channel)) {
+                    ((SimpleProtocolManager) proto).channels.put(uuid, channel);
                 }
             }
         }

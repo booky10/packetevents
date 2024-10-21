@@ -19,14 +19,23 @@
 package io.github.retrooper.packetevents.impl.netty.manager.protocol;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import com.github.retrooper.packetevents.protocol.ProtocolVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
 import io.netty.buffer.ByteBuf;
+import org.jetbrains.annotations.ApiStatus;
 
-public abstract class ProtocolManagerAbstract implements ProtocolManager {
+@ApiStatus.Internal
+public abstract class ProtocolManagerAbstract extends SimpleProtocolManager {
+
+    public ProtocolManagerAbstract(PacketEventsAPI<?> api) {
+        super(api);
+    }
+
     @Override
     public abstract ProtocolVersion getPlatformVersion();
 

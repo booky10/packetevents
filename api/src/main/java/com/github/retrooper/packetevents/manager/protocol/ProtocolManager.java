@@ -18,41 +18,37 @@
 
 package com.github.retrooper.packetevents.manager.protocol;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
 import com.github.retrooper.packetevents.protocol.ProtocolVersion;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.PacketTransformationUtil;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public interface ProtocolManager {
-    Map<UUID, Object> CHANNELS = new ConcurrentHashMap<>();
-    // Use SocketAddress because ProtocolLib wraps Channels with NettyChannelProxy class
-    Map<Object, User> USERS = new ConcurrentHashMap<>();
 
-    default Collection<User> getUsers() {
-        return USERS.values();
-    }
+    Collection<User> getUsers();
 
-    default Collection<Object> getChannels() {
-        return CHANNELS.values();
-    }
+    Collection<Object> getChannels();
 
-    //Methods to implement
     ProtocolVersion getPlatformVersion();
+
     void sendPacket(Object channel, Object byteBuf);
+
     void sendPacketSilently(Object channel, Object byteBuf);
+
     void writePacket(Object channel, Object byteBuf);
+
     void writePacketSilently(Object channel, Object byteBuf);
+
     void receivePacket(Object channel, Object byteBuf);
+
     void receivePacketSilently(Object channel, Object byteBuf);
+
     ClientVersion getClientVersion(Object channel);
     //TODO Define method that accepts an array of channels/set/list of channels.
 
@@ -91,7 +87,6 @@ public interface ProtocolManager {
             receivePacketSilently(channel, buf);
         }
     }
-
 
     default void setClientVersion(Object channel, ClientVersion version) {
         getUser(channel).setClientVersion(version);
@@ -145,25 +140,11 @@ public interface ProtocolManager {
         receivePacketsSilently(channel, transformed);
     }
 
-    default User getUser(Object channel) {
-        Object pipeline = ChannelHelper.getPipeline(channel);
-        return USERS.get(pipeline);
-    }
+    User getUser(Object channel);
 
-    default User removeUser(Object channel) {
-        Object pipeline = ChannelHelper.getPipeline(channel);
-        return USERS.remove(pipeline);
-    }
+    User removeUser(Object channel);
 
-    default void setUser(Object channel, User user) {
-        synchronized (channel) {
-            Object pipeline = ChannelHelper.getPipeline(channel);
-            USERS.put(pipeline, user);
-        }
-        PacketEvents.getAPI().getInjector().updateUser(channel, user);
-    }
+    void setUser(Object channel, User user);
 
-    default Object getChannel(UUID uuid) {
-        return CHANNELS.get(uuid);
-    }
+    @Nullable Object getChannel(UUID playerId);
 }

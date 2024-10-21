@@ -21,7 +21,6 @@ package io.github.retrooper.packetevents.mixin;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.UserConnectEvent;
-import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
 import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -64,7 +63,7 @@ public class ConnectionMixin {
         Channel channel = pipeline.channel();
         User user = new User(channel, ConnectionState.HANDSHAKING,
                 CLIENT_VERSION, new UserProfile(null, null));
-        ProtocolManager.USERS.put(channel, user);
+        api.getProtocolManager().setUser(channel, user);
 
         UserConnectEvent connectEvent = new UserConnectEvent(user);
         api.getEventManager().callEvent(connectEvent);

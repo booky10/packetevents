@@ -86,7 +86,7 @@ public class BungeePacketEventsBuilder {
         return new PacketEventsAPI<Plugin>() {
             private final PacketEventsSettings settings = inSettings;
             // TODO: Implement platform version
-            private final ProtocolManager protocolManager = new ProtocolManagerAbstract() {
+            private final ProtocolManager protocolManager = new ProtocolManagerAbstract(this) {
                 @Override
                 public ProtocolVersion getPlatformVersion() {
                     return ProtocolVersion.UNKNOWN;

@@ -21,6 +21,7 @@ package io.github.retrooper.packetevents.processor;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.UserLoginEvent;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.manager.protocol.SimpleProtocolManager;
 import com.github.retrooper.packetevents.protocol.player.User;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -59,7 +60,10 @@ public class InternalBungeeProcessor implements Listener {
             throw new RuntimeException("Error looking up channel from " + player, exception);
         }
 
-        ProtocolManager.CHANNELS.put(player.getUniqueId(), channel);
+        ProtocolManager proto = PacketEvents.getAPI().getProtocolManager();
+        if (proto instanceof SimpleProtocolManager) {
+            ((SimpleProtocolManager) proto).channels.put(player.getUniqueId(), channel);
+        }
         PacketEvents.getAPI().getInjector().setPlayer(channel, player);
 
         User user = PacketEvents.getAPI().getPlayerManager().getUser(event.getPlayer());
