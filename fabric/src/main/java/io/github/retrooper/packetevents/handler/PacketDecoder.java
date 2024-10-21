@@ -18,6 +18,7 @@
 
 package io.github.retrooper.packetevents.handler;
 
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.PacketEventsImplHelper;
@@ -32,11 +33,14 @@ import java.util.List;
 @ApiStatus.Internal
 public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 
+    private final PacketEventsAPI<?> api;
     private final PacketSide side;
+
     public User user;
     public Player player;
 
-    public PacketDecoder(PacketSide side, User user) {
+    public PacketDecoder(PacketEventsAPI<?> api, PacketSide side, User user) {
+        this.api = api;
         this.side = side.getOpposite();
         this.user = user;
     }

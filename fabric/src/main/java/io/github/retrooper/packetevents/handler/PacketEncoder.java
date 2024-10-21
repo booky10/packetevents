@@ -18,6 +18,7 @@
 
 package io.github.retrooper.packetevents.handler;
 
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.protocol.PacketSide;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.PacketEventsImplHelper;
@@ -31,11 +32,14 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public class PacketEncoder extends ChannelOutboundHandlerAdapter {
 
+    private final PacketEventsAPI<?> api;
     private final PacketSide side;
+
     public User user;
     public Player player;
 
-    public PacketEncoder(PacketSide side, User user) {
+    public PacketEncoder(PacketEventsAPI<?> api, PacketSide side, User user) {
+        this.api = api;
         this.side = side;
         this.user = user;
     }

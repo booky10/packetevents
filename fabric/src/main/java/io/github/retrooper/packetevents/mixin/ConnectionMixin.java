@@ -19,6 +19,7 @@
 package io.github.retrooper.packetevents.mixin;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.UserConnectEvent;
 import com.github.retrooper.packetevents.manager.protocol.ProtocolManager;
 import com.github.retrooper.packetevents.protocol.ConnectionState;
@@ -54,7 +55,11 @@ public class ConnectionMixin {
             ChannelPipeline pipeline, PacketFlow flow, boolean memoryOnly,
             BandwidthDebugMonitor bandwithDebugMonitor, CallbackInfo ci
     ) {
-        PacketEvents.getAPI().getLogManager().debug("Game connected!");
+        PacketEventsAPI<?> api = switch (flow) {
+            case CLIENTBOUND -> PacketEvents.getClientAPI();
+            case SERVERBOUND -> PacketEvents.getServerAPI();
+        };
+        api.getLogManager().debug("Game connected on " + flow);
 
         Channel channel = pipeline.channel();
         User user = new User(channel, ConnectionState.HANDSHAKING,
@@ -62,15 +67,17 @@ public class ConnectionMixin {
         ProtocolManager.USERS.put(channel, user);
 
         UserConnectEvent connectEvent = new UserConnectEvent(user);
-        PacketEvents.getAPI().getEventManager().callEvent(connectEvent);
+        api.getEventManager().callEvent(connectEvent);
         if (connectEvent.isCancelled()) {
             channel.unsafe().closeForcibly();
             return;
         }
 
-        PacketSide side = PacketEvents.getAPI().getInjector().isServerBound() ? PacketSide.SERVER : PacketSide.CLIENT;
-        channel.pipeline().addAfter("splitter", PacketEvents.DECODER_NAME, new PacketDecoder(side, user));
-        channel.pipeline().addAfter("prepender", PacketEvents.ENCODER_NAME, new PacketEncoder(side, user));
+        PacketSide side = flow == PacketFlow.CLIENTBOUND ? PacketSide.CLIENT : PacketSide.SERVER;
+        channel.pipeline().addAfter("splitter", PacketEvents.DECODER_NAME,
+                new PacketDecoder(api, side, user));
+        channel.pipeline().addAfter("prepender", PacketEvents.ENCODER_NAME,
+                new PacketEncoder(api, side, user));
         channel.closeFuture().addListener((ChannelFutureListener) future ->
                 PacketEventsImplHelper.handleDisconnection(user.getChannel(), user.getUUID()));
     }

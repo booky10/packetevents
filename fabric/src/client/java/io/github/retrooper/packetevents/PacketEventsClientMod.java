@@ -38,8 +38,8 @@ public class PacketEventsClientMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        PacketEvents.setAPI(constructApi("packetevents"));
-        PacketEvents.getAPI().load();
-        PacketEvents.getAPI().init();
+        PacketEvents.setClientAPI(constructApi("packetevents"));
+        PacketEvents.getClientAPI().load();
+        PacketEvents.getClientAPI().init();
     }
 }

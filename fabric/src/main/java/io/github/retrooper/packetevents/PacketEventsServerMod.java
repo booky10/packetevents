@@ -31,8 +31,8 @@ public class PacketEventsServerMod implements DedicatedServerModInitializer {
 
     @Override
     public void onInitializeServer() {
-        PacketEvents.setAPI(constructApi("packetevents"));
-        PacketEvents.getAPI().load();
-        PacketEvents.getAPI().init();
+        PacketEvents.setServerAPI(constructApi("packetevents"));
+        PacketEvents.getServerAPI().load();
+        PacketEvents.getServerAPI().init();
     }
 }
