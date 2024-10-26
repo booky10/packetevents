@@ -36,6 +36,7 @@ tasks {
 
         relocate("net.kyori.adventure.text.serializer", "io.github.retrooper.packetevents.adventure.serializer")
         relocate("net.kyori.option", "io.github.retrooper.packetevents.adventure.option")
+        relocate("org.bstats", "io.github.retrooper.packetevents.bstats")
 
         dependencies {
             exclude(dependency("net.kyori:adventure-api:.*"))
