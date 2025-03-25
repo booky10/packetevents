@@ -75,7 +75,7 @@ public final class SynchronizedRegistriesHandler {
                 new RegistryEntry<>(ChatTypes.getRegistry(), ChatType::decode),
                 new RegistryEntry<>(TrimPatterns.getRegistry(), TrimPattern::decode),
                 new RegistryEntry<>(TrimMaterials.getRegistry(), TrimMaterial::decode),
-                new RegistryEntry<>(WolfVariants.getRegistry(), WolfVariant::decode),
+//                new RegistryEntry<>(WolfVariants.getRegistry(), WolfVariant::decode),
                 new RegistryEntry<>(PaintingVariants.getRegistry(), PaintingVariant::decode),
                 new RegistryEntry<>(DimensionTypes.getRegistry(), DimensionType::decode),
                 new RegistryEntry<>(DamageTypes.getRegistry(), DamageType::decode),
