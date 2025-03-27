@@ -292,7 +292,8 @@ Save New Duplicate & Edit Just Text
 
 ### serverbound set structure block packet
 
-- there is a new flag (0b1000) called "strict"
+- [X] there is a new flag (0b1000) called "strict"
+- wrapper doesnt exist in packet events
 
 ### serverbound set test block packet
 
