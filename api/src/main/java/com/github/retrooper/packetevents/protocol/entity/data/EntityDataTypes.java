@@ -159,14 +159,7 @@ public class EntityDataTypes {
 
     public static final EntityDataType<Integer> CAT_VARIANT = define("cat_variant_type", readIntDeserializer(), writeIntSerializer());
 
-    public static final EntityDataType<Integer> COW_VARIANT = define("cow_variant_type", readIntDeserializer(), writeIntSerializer());
-
     public static final EntityDataType<Integer> FROG_VARIANT = define("frog_variant_type", readIntDeserializer(), writeIntSerializer());
-
-    public static final EntityDataType<Integer> PIG_VARIANT = define("pig_variant_type", readIntDeserializer(), writeIntSerializer());
-
-    public static final EntityDataType<Integer> CHICKEN_VARIANT = define("chicken_variant_type", readIntDeserializer(), writeIntSerializer());
-
 
     public static final EntityDataType<Optional<WorldBlockPosition>> OPTIONAL_GLOBAL_POSITION = define("optional_global_position",
             (PacketWrapper<?> wrapper) -> Optional.ofNullable(wrapper.readOptional(w -> new WorldBlockPosition(new ResourceLocation(w.readString(32767)), w.readBlockPosition()))),
@@ -212,9 +205,6 @@ public class EntityDataTypes {
 
     public static final EntityDataType<Integer> WOLF_VARIANT =
             define("wolf_variant_type", readIntDeserializer(), writeIntSerializer());
-
-    public static final EntityDataType<Integer> WOLF_SOUND_VARIANT =
-        define("wolf_sound_variant_type", readIntDeserializer(), writeIntSerializer());
 
     /**
      * Returns an immutable view of the entity-data types.

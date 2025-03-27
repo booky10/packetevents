@@ -288,6 +288,29 @@ Save New Duplicate & Edit Just Text
 - test instance block entity status enum: status
 - optional component: error message
 
+## entity data serializer types
+
+### chicken variant (after pig variant)
+
+- new
+- chicken variant holder
+
+### cow variant (after cat variant)
+
+- new
+- cow variant holder
+
+### wolf sound variant (after wolf variant)
+
+- new
+- wolf sound variant holder
+
+### pig variant (after frog variant)
+
+- new
+- pig variant holder
+
+
 ## TODO
 
 continue @ AdvancementCommands
