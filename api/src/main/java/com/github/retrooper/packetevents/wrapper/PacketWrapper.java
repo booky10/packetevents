@@ -1153,11 +1153,23 @@ public class PacketWrapper<T extends PacketWrapper<T>> {
     public LastSeenMessages.Update readLastSeenMessagesUpdate() {
         int signedMessages = readVarInt();
         BitSet seen = BitSet.valueOf(readBytes(3));
+        return new LastSeenMessages.Update(signedMessages, seen);
+    }
+
+    public LastSeenMessages.Update_1_21_5 read1_21_5LastSeenMessagesUpdate() {
+        int signedMessages = readVarInt();
+        BitSet seen = BitSet.valueOf(readBytes(3));
         byte checksum = readByte();
-        return new LastSeenMessages.Update(signedMessages, seen, checksum);
+        return new LastSeenMessages.Update_1_21_5(signedMessages, seen, checksum);
     }
 
     public void writeLastSeenMessagesUpdate(LastSeenMessages.Update update) {
+        writeVarInt(update.getOffset());
+        byte[] lastSeen = Arrays.copyOf(update.getAcknowledged().toByteArray(), 3);
+        writeBytes(lastSeen);
+    }
+
+    public void write1_21_5LastSeenMessagesUpdate(LastSeenMessages.Update_1_21_5 update) {
         writeVarInt(update.getOffset());
         byte[] lastSeen = Arrays.copyOf(update.getAcknowledged().toByteArray(), 3);
         writeByte(update.getChecksum());

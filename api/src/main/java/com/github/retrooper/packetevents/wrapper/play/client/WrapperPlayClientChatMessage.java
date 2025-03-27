@@ -38,6 +38,7 @@ public class WrapperPlayClientChatMessage extends PacketWrapper<WrapperPlayClien
     private String message;
     private MessageSignData messageSignData;
     private @Nullable LastSeenMessages.Update lastSeenMessages;
+    private @Nullable LastSeenMessages.Update_1_21_5 lastSeenMessages1_21_5;
     private @Nullable LastSeenMessages.LegacyUpdate legacyLastSeenMessages;
 
     public WrapperPlayClientChatMessage(PacketReceiveEvent event) {
@@ -58,6 +59,13 @@ public class WrapperPlayClientChatMessage extends PacketWrapper<WrapperPlayClien
         this.lastSeenMessages = lastSeenMessages;
     }
 
+    public WrapperPlayClientChatMessage(String message, MessageSignData messageSignData, @Nullable LastSeenMessages.Update_1_21_5 lastSeenMessages) {
+        super(PacketType.Play.Client.CHAT_MESSAGE);
+        this.message = message;
+        this.messageSignData = messageSignData;
+        this.lastSeenMessages1_21_5 = lastSeenMessages;
+    }
+
     @Override
     public void read() {
         int maxMessageLength = serverVersion.isNewerThanOrEquals(ServerVersion.V_1_11) ? 256 : 100;
@@ -66,7 +74,9 @@ public class WrapperPlayClientChatMessage extends PacketWrapper<WrapperPlayClien
             Instant timestamp = readTimestamp();
             this.messageSignData = new MessageSignData(readSaltSignature(), timestamp);
 
-            if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
+            if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+                this.lastSeenMessages1_21_5 = read1_21_5LastSeenMessagesUpdate();
+            } else if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
                 this.lastSeenMessages = readLastSeenMessagesUpdate();
             } else {
                 boolean signedPreview = readBoolean();
@@ -87,8 +97,11 @@ public class WrapperPlayClientChatMessage extends PacketWrapper<WrapperPlayClien
             writeTimestamp(messageSignData.getTimestamp());
             writeSaltSignature(messageSignData.getSaltSignature());
 
-
-            if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
+            if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+                if(lastSeenMessages1_21_5 != null) {
+                    write1_21_5LastSeenMessagesUpdate(lastSeenMessages1_21_5);
+                }
+            } else if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
                 if (lastSeenMessages != null)
                     writeLastSeenMessagesUpdate(lastSeenMessages);
             } else {
