@@ -279,7 +279,8 @@ Save New Duplicate & Edit Just Text
 
 ### serverbound move vehicle packet
 
-- no changes to strucutre, but this now has special handling for interpolated entities
+- [X] no changes to strucutre, but this now has special handling for interpolated entities
+- the .fromEntity method does not exist in packet events, thus no changes needed
 
 ### serverbound select bundle item packet
 
