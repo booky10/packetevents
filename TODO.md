@@ -271,7 +271,7 @@ Save New Duplicate & Edit Just Text
 
 ### serverbound chat packet + serverbound chat command signed packet
 
-- last seen messages now include a checksum byte (last)
+- [X] last seen messages now include a checksum byte (last) 
 
 ### serverbound container click packet
 

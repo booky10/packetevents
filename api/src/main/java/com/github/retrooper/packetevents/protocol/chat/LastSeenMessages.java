@@ -88,10 +88,12 @@ public class LastSeenMessages {
     public static class Update {
         private final int offset;
         private final BitSet acknowledged;
+        private final byte checksum;
 
-        public Update(int offset, BitSet acknowledged) {
+        public Update(int offset, BitSet acknowledged, byte checksum) {
             this.offset = offset;
             this.acknowledged = acknowledged;
+            this.checksum = checksum;
         }
 
         public int getOffset() {
@@ -100,6 +102,10 @@ public class LastSeenMessages {
 
         public BitSet getAcknowledged() {
             return acknowledged;
+        }
+
+        public byte getChecksum() {
+            return checksum;
         }
     }
 }
