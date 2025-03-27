@@ -251,10 +251,6 @@ Save New Duplicate & Edit Just Text
 
 - heightmaps are no longer serialized as nbt and instead serialized as a map of "heightmap type enum" to "long array"
 
-### clientbound player chat packet
-
-- [X] varint: global index (start of packet)
-
 ### clientbound set player team packet parameters
 
 - team visibility and team collision rule is now serialized as an enum instead of a string
@@ -269,38 +265,13 @@ Save New Duplicate & Edit Just Text
 
 - bool: show advancements (last)
 
-### serverbound chat packet + serverbound chat command signed packet
-
-- [X] last seen messages now include a checksum byte (last) 
-
 ### serverbound container click packet
 
 - slots and carried item is no longer a raw itemstack, but instead a "hashed stack" (new structure)
 
-### serverbound move vehicle packet
-
-- [X] no changes to strucutre, but this now has special handling for interpolated entities
-- the .fromEntity method does not exist in packet events, thus no changes needed
-
-### serverbound select bundle item packet
-
-- [X] no changes to structure, but this now validates that selectedItemIndex has to be at least -1 immediately after reading
-
 ### serverbound set creative mode slot packet
 
 - the item stack is now written as an "untrusted" item stack, see above for more info
-
-### serverbound set structure block packet
-
-- [X] there is a new flag (0b1000) called "strict"
-- wrapper doesnt exist in packet events
-
-### serverbound set test block packet
-
-- new
-- block pos: position
-- test block mode enum: mode
-- string: message
 
 ### serverbound test instance block action packet
 
