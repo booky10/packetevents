@@ -253,7 +253,7 @@ Save New Duplicate & Edit Just Text
 
 ### clientbound player chat packet
 
-- varint: global index (start of packet)
+- [X] varint: global index (start of packet)
 
 ### clientbound set player team packet parameters
 

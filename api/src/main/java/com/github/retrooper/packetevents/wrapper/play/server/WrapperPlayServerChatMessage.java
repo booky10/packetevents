@@ -21,6 +21,7 @@ package com.github.retrooper.packetevents.wrapper.play.server;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage;
+import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_21_5;
 import com.github.retrooper.packetevents.protocol.chat.message.reader.ChatMessageProcessor;
 import com.github.retrooper.packetevents.protocol.chat.message.reader.impl.*;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
@@ -33,6 +34,7 @@ public class WrapperPlayServerChatMessage extends PacketWrapper<WrapperPlayServe
     private static final ChatMessageProcessor CHAT_V1_19_PROCESSOR;
     private static final ChatMessageProcessor CHAT_V1_19_1_PROCESSOR;
     private static final ChatMessageProcessor CHAT_V1_19_3_PROCESSOR;
+    private static final ChatMessageProcessor_v1_21_5 CHAT_V1_21_5_PROCESSOR;
 
     static {
         CHAT_LEGACY_PROCESSOR = new ChatMessageProcessorLegacy();
@@ -40,6 +42,7 @@ public class WrapperPlayServerChatMessage extends PacketWrapper<WrapperPlayServe
         CHAT_V1_19_PROCESSOR = new ChatMessageProcessor_v1_19();
         CHAT_V1_19_1_PROCESSOR = new ChatMessageProcessor_v1_19_1();
         CHAT_V1_19_3_PROCESSOR = new ChatMessageProcessor_v1_19_3();
+        CHAT_V1_21_5_PROCESSOR = new ChatMessageProcessor_v1_21_5();
     }
 
     private ChatMessage message;
@@ -78,7 +81,9 @@ public class WrapperPlayServerChatMessage extends PacketWrapper<WrapperPlayServe
 
     @Internal
     protected ChatMessageProcessor getProcessor() {
-        if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
+        if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+            return CHAT_V1_21_5_PROCESSOR;
+        } else if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
             return CHAT_V1_19_3_PROCESSOR;
         } else if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19_1)) {
             return CHAT_V1_19_1_PROCESSOR;
