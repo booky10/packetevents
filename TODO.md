@@ -284,7 +284,7 @@ Save New Duplicate & Edit Just Text
 
 ### serverbound select bundle item packet
 
-- no changes to structure, but this now validates that selectedItemIndex has to be at least -1 immediately after reading
+- [X] no changes to structure, but this now validates that selectedItemIndex has to be at least -1 immediately after reading
 
 ### serverbound set creative mode slot packet
 

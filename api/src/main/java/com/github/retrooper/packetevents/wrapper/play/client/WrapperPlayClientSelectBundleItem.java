@@ -41,6 +41,9 @@ public class WrapperPlayClientSelectBundleItem extends PacketWrapper<WrapperPlay
     public void read() {
         this.slotId = this.readVarInt();
         this.selectedItemIndex = this.readVarInt();
+        if (this.selectedItemIndex < 0 && this.selectedItemIndex != -1) {
+            throw new IllegalArgumentException("Invalid selectedItemIndex: " + this.selectedItemIndex);
+        }
     }
 
     @Override
