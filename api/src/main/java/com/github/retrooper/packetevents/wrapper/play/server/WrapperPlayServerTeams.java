@@ -169,9 +169,16 @@ public class WrapperPlayServerTeams extends PacketWrapper<WrapperPlayServerTeams
                     nameTagVisibility = NameTagVisibility.ALWAYS;
                     color = NamedTextColor.WHITE;
                 } else {
-                    nameTagVisibility = NameTagVisibility.fromID(readString(32));
-                    if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9))
+                    if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+                        nameTagVisibility = readEnum(NameTagVisibility.class);
+                    } else {
+                        nameTagVisibility = NameTagVisibility.fromID(readString(32));
+                    }
+                    if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+                        collisionRule = readEnum(CollisionRule.class);
+                    } else if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_9)) {
                         collisionRule = CollisionRule.fromID(readString(32));
+                    }
                     if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_17)) {
                         // starting from 1.17, the color is sent with ColorFormatting enum ordinal
                         int colorId = readVarInt();
@@ -229,6 +236,21 @@ public class WrapperPlayServerTeams extends PacketWrapper<WrapperPlayServerTeams
                         writeString(info.collisionRule.getId(), 32);
                     writeByte(ColorUtil.getId(info.color));
                 }
+            } else if(serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_5)) {
+                writeComponent(info.displayName);
+                writeByte(info.optionData.getByteValue());
+                writeEnum(info.tagVisibility);
+                writeEnum(info.collisionRule);
+                if (serverVersion.isNewerThanOrEquals(ServerVersion.V_1_17)) {
+                    int colorId = ColorUtil.getId(info.color);
+                    if (colorId < 0)
+                        colorId = 21; // since 1.17, minecraft decides to use writeEnum rather than writing it value, while 21 equals RESET
+                    writeVarInt(colorId);
+                } else {
+                    writeByte(ColorUtil.getId(info.color));
+                }
+                writeComponent(info.prefix);
+                writeComponent(info.suffix);
             } else {
                 writeComponent(info.displayName);
                 writeByte(info.optionData.getByteValue());

@@ -251,19 +251,17 @@ Save New Duplicate & Edit Just Text
 
 - heightmaps are no longer serialized as nbt and instead serialized as a map of "heightmap type enum" to "long array"
 
-### clientbound set player team packet parameters
+### clientbound update advancements packet
 
-- team visibility and team collision rule is now serialized as an enum instead of a string
+- bool: show advancements (last)
+
+# Hard to implement
 
 ### clientbound test instance block status packet
 
 - new
 - component: status
 - optional vec3i: size
-
-### clientbound update advancements packet
-
-- bool: show advancements (last)
 
 ### serverbound container click packet
 
