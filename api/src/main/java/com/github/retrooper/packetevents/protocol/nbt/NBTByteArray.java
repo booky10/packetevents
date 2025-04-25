@@ -20,7 +20,7 @@ package com.github.retrooper.packetevents.protocol.nbt;
 
 import java.util.Arrays;
 
-public class NBTByteArray extends NBT {
+public class NBTByteArray extends NBT implements NBTCollection {
 
     protected final byte[] array;
 
@@ -31,6 +31,16 @@ public class NBTByteArray extends NBT {
     @Override
     public NBTType<NBTByteArray> getType() {
         return NBTType.BYTE_ARRAY;
+    }
+
+    @Override
+    public NBTByte getTag(int index) {
+        return new NBTByte(this.array[index]);
+    }
+
+    @Override
+    public int size() {
+        return this.array.length;
     }
 
     public byte[] getValue() {

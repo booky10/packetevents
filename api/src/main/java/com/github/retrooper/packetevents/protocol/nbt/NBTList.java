@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class NBTList<T extends NBT> extends NBT {
+public class NBTList<T extends NBT> extends NBT implements NBTCollection {
 
     protected final NBTType<T> type;
     protected final List<T> tags;
@@ -71,10 +71,12 @@ public class NBTList<T extends NBT> extends NBT {
         return tags.size();
     }
 
+    @Override
     public List<T> getTags() {
         return Collections.unmodifiableList(tags);
     }
 
+    @Override
     public T getTag(int index) {
         return tags.get(index);
     }

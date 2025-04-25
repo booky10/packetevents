@@ -18,6 +18,7 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
@@ -28,7 +29,20 @@ import java.util.Set;
 
 public class NBTCompound extends NBT {
 
-    protected final Map<String, NBT> tags = new LinkedHashMap<>();
+    protected final Map<String, NBT> tags;
+
+    public NBTCompound() {
+        this(new LinkedHashMap<>());
+    }
+
+    public NBTCompound(int expectedSize) {
+        this(new LinkedHashMap<>(expectedSize));
+    }
+
+    @ApiStatus.Internal
+    public NBTCompound(Map<String, NBT> tags) {
+        this.tags = tags;
+    }
 
     @Override
     public NBTType<NBTCompound> getType() {
