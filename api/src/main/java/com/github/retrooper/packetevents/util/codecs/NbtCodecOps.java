@@ -21,15 +21,18 @@ package com.github.retrooper.packetevents.util.codecs;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.nbt.NBT;
 import com.github.retrooper.packetevents.protocol.nbt.NBTByte;
+import com.github.retrooper.packetevents.protocol.nbt.NBTByteArray;
 import com.github.retrooper.packetevents.protocol.nbt.NBTCollection;
 import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
 import com.github.retrooper.packetevents.protocol.nbt.NBTDouble;
 import com.github.retrooper.packetevents.protocol.nbt.NBTEnd;
 import com.github.retrooper.packetevents.protocol.nbt.NBTFloat;
 import com.github.retrooper.packetevents.protocol.nbt.NBTInt;
+import com.github.retrooper.packetevents.protocol.nbt.NBTIntArray;
 import com.github.retrooper.packetevents.protocol.nbt.NBTList;
 import com.github.retrooper.packetevents.protocol.nbt.NBTListUtil;
 import com.github.retrooper.packetevents.protocol.nbt.NBTLong;
+import com.github.retrooper.packetevents.protocol.nbt.NBTLongArray;
 import com.github.retrooper.packetevents.protocol.nbt.NBTNumber;
 import com.github.retrooper.packetevents.protocol.nbt.NBTShort;
 import com.github.retrooper.packetevents.protocol.nbt.NBTString;
@@ -154,5 +157,20 @@ public class NbtCodecOps extends CodecOps<NBT> {
             return NBTListUtil.constructList(values);
         }
         return NBTListUtil.constructListOrArray(values);
+    }
+
+    @Override
+    public NBT createByteList(byte[] values) {
+        return new NBTByteArray(values);
+    }
+
+    @Override
+    public NBT createIntList(int[] values) {
+        return new NBTIntArray(values);
+    }
+
+    @Override
+    public NBT getLongList(long[] values) {
+        return new NBTLongArray(values);
     }
 }

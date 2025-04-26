@@ -105,23 +105,25 @@ public final class Crc32CHasher {
         return update(update(crc, b1), b2);
     }
 
-    // everything here is in little endian byte order
-
     public static int updateShort(int crc, short s) {
-        return update(crc, (byte) (s & 0xFF), (byte) ((s >> 8) & 0xFF));
+        return update(crc, (byte) s, (byte) (s >>> 8));
+    }
+
+    public static int updateChar(int crc, char c) {
+        return updateShort(crc, (short) c);
     }
 
     public static int updateInt(int crc, int i) {
-        crc = update(crc, (byte) (i & 0xFF), (byte) ((i >> 8) & 0xFF));
-        crc = update(crc, (byte) ((i >> 16) & 0xFF), (byte) ((i >> 24) & 0xFF));
+        crc = update(crc, (byte) i, (byte) (i >>> 8));
+        crc = update(crc, (byte) (i >>> 16), (byte) (i >>> 24));
         return crc;
     }
 
     public static int updateLong(int crc, long l) {
-        crc = update(crc, (byte) (l & 0xFF), (byte) ((l >> 8) & 0xFF));
-        crc = update(crc, (byte) ((l >> 16) & 0xFF), (byte) ((l >> 24) & 0xFF));
-        crc = update(crc, (byte) ((l >> 32) & 0xFF), (byte) ((l >> 40) & 0xFF));
-        crc = update(crc, (byte) ((l >> 48) & 0xFF), (byte) ((l >> 56) & 0xFF));
+        crc = update(crc, (byte) l, (byte) (l >>> 8));
+        crc = update(crc, (byte) (l >>> 16), (byte) (l >>> 24));
+        crc = update(crc, (byte) (l >>> 32), (byte) (l >>> 40));
+        crc = update(crc, (byte) (l >>> 48), (byte) (l >>> 56));
         return crc;
     }
 

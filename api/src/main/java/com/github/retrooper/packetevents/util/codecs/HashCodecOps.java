@@ -19,6 +19,7 @@
 package com.github.retrooper.packetevents.util.codecs;
 
 import com.github.retrooper.packetevents.util.Crc32CHasher;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.AbstractMap;
@@ -61,6 +62,10 @@ public class HashCodecOps extends CodecOps<Integer> {
     private static final Comparator<Map.Entry<Integer, Integer>> MAP_ENTRY_ORDER = Map.Entry
             .<Integer, Integer>comparingByKey(HASH_COMPARATOR)
             .thenComparing(Map.Entry::getValue, HASH_COMPARATOR);
+
+    public HashCodecOps(PacketWrapper<?> packet) {
+        super(packet);
+    }
 
     @Override
     public CodecResult<Number> getNumberValue(Integer input) {
@@ -156,18 +161,23 @@ public class HashCodecOps extends CodecOps<Integer> {
 
     @Override
     public Integer createString(String value) {
-        return 0; // TODO
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_STRING);
+        crc = Crc32CHasher.updateInt(crc, value.length());
+        for (int i = 0, len = value.length(); i < len; i++) {
+            crc = Crc32CHasher.updateChar(crc, value.charAt(i));
+        }
+        return crc;
     }
 
     @Override
     public Integer createMap(Map<String, Integer> values) {
-        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_MAP_START);
         List<Map.Entry<Integer, Integer>> entries = new ArrayList<>(values.size());
         for (Map.Entry<String, Integer> entry : values.entrySet()) {
             Integer stringCrc = this.createString(entry.getKey());
             entries.add(new AbstractMap.SimpleEntry<>(stringCrc, entry.getValue()));
         }
         entries.sort(MAP_ENTRY_ORDER);
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_MAP_START);
         for (Map.Entry<Integer, Integer> entry : entries) {
             crc = Crc32CHasher.updateInt(crc, entry.getKey());
             crc = Crc32CHasher.updateInt(crc, entry.getValue());
@@ -177,6 +187,37 @@ public class HashCodecOps extends CodecOps<Integer> {
 
     @Override
     public Integer createList(List<Integer> values) {
-        return 0; // TODO
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_LIST_START);
+        for (int value : values) {
+            crc = Crc32CHasher.updateInt(crc, value);
+        }
+        return Crc32CHasher.update(crc, TAG_LIST_END);
+    }
+
+    @Override
+    public Integer createByteList(byte[] values) {
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_BYTE_ARRAY_START);
+        for (byte value : values) {
+            crc = Crc32CHasher.update(crc, value);
+        }
+        return Crc32CHasher.update(crc, TAG_BYTE_ARRAY_END);
+    }
+
+    @Override
+    public Integer createIntList(int[] values) {
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_INT_ARRAY_START);
+        for (int value : values) {
+            crc = Crc32CHasher.updateInt(crc, value);
+        }
+        return Crc32CHasher.update(crc, TAG_INT_ARRAY_END);
+    }
+
+    @Override
+    public Integer getLongList(long[] values) {
+        int crc = Crc32CHasher.update(INITIAL_CRC, TAG_LONG_ARRAY_START);
+        for (long value : values) {
+            crc = Crc32CHasher.updateLong(crc, value);
+        }
+        return Crc32CHasher.update(crc, TAG_LONG_ARRAY_END);
     }
 }

@@ -87,6 +87,12 @@ public abstract class CodecOps<T> {
 
     public abstract T createList(List<T> values);
 
+    public abstract T createByteList(byte[] values);
+
+    public abstract T createIntList(int[] values);
+
+    public abstract T getLongList(long[] values);
+
     public PacketWrapper<?> getPacket() {
         return this.packet;
     }
