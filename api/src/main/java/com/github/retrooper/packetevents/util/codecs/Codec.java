@@ -23,6 +23,18 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface Codec<V> extends CodecReader<V>, CodecWriter<V> {
 
+    Codec<Integer> INTEGER = new Codec<Integer>() {
+        @Override
+        public <T> Integer read(CodecOps<T> ops, T input) {
+            return ops.getNumberValue(input).getResultOrThrow().intValue();
+        }
+
+        @Override
+        public <T> T write(CodecOps<T> ops, Integer input, T prefix) {
+            return ops.createInt(input);
+        }
+    };
+
     static <V> Codec<V> codec(CodecReader<V> reader, CodecWriter<V> writer) {
         return new Codec<V>() {
             @Override
@@ -31,8 +43,8 @@ public interface Codec<V> extends CodecReader<V>, CodecWriter<V> {
             }
 
             @Override
-            public <T> T write(V input, CodecOps<T> ops, T prefix) {
-                return writer.write(input, ops, prefix);
+            public <T> T write(CodecOps<T> ops, V input, T prefix) {
+                return writer.write(ops, input, prefix);
             }
         };
     }

@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,20 @@ public abstract class CodecOps<T> {
 
     public abstract CodecResult<List<T>> getList(T input);
 
+    @SuppressWarnings("unchecked") // doesn't matter when errored
+    public <V> CodecResult<List<V>> getList(T input, CodecReader<V> reader) {
+        CodecResult<List<T>> listResult = this.getList(input);
+        List<T> list = listResult.getResult();
+        if (list == null) {
+            return (CodecResult<List<V>>) (CodecResult<?>) listResult;
+        }
+        List<V> readList = new ArrayList<>(list.size());
+        for (T element : list) {
+            readList.add(reader.read(this, element));
+        }
+        return new CodecResult<>(readList);
+    }
+
     public abstract T createEmpty();
 
     public abstract T createEmptyMap();
@@ -86,6 +101,14 @@ public abstract class CodecOps<T> {
     public abstract T createMap(Map<String, T> values);
 
     public abstract T createList(List<T> values);
+
+    public <V> T createList(List<V> values, CodecWriter<V> writer) {
+        List<T> tags = new ArrayList<>(values.size());
+        for (V value : values) {
+            tags.add(writer.write(this, value));
+        }
+        return this.createList(tags);
+    }
 
     public abstract T createByteList(byte[] values);
 

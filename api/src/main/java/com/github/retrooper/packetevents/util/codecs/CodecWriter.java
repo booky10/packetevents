@@ -24,5 +24,9 @@ import org.jspecify.annotations.NullMarked;
 @FunctionalInterface
 public interface CodecWriter<V> {
 
-    <T> T write(V input, CodecOps<T> ops, T prefix);
+    default <T> T write(CodecOps<T> ops, V input) {
+        return this.write(ops, input, ops.createEmpty());
+    }
+
+    <T> T write(CodecOps<T> ops, V input, T prefix);
 }

@@ -43,6 +43,14 @@ public class CodecResult<T> {
         this.error = error;
     }
 
+    public T getResultOrThrow() {
+        if (this.result != null) {
+            return this.result;
+        }
+        String error = this.error != null ? this.error.get() : null;
+        throw new IllegalStateException(error);
+    }
+
     public @Nullable T getResult() {
         return this.result;
     }
