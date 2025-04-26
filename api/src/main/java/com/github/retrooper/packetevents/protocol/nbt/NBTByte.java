@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public class NBTByte extends NBTNumber {
 
     protected final byte value;
@@ -97,6 +99,11 @@ public class NBTByte extends NBTNumber {
     @Override
     public NBTByte copy() {
         return this;
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        return this.value + "b";
     }
 
     @Override

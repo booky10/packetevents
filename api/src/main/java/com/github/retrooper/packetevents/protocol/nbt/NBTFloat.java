@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public class NBTFloat extends NBTNumber {
 
     protected final float value;
@@ -89,6 +91,11 @@ public class NBTFloat extends NBTNumber {
     @Override
     public NBTFloat copy() {
         return this;
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        return this.value + "f";
     }
 
     @Override

@@ -18,16 +18,22 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class NBTCompound extends NBT {
+
+    private static final Pattern UNQUOTED_KEY_MATCH = Pattern.compile("[A-Za-z._]+[A-Za-z0-9._+-]*");
 
     protected final Map<String, NBT> tags;
 
@@ -240,6 +246,31 @@ public class NBTCompound extends NBT {
     @Override
     public int hashCode() {
         return tags.hashCode();
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        boolean v1215 = version.isNewerThanOrEquals(ClientVersion.V_1_21_5);
+        StringBuilder builder = new StringBuilder("{");
+        List<Map.Entry<String, NBT>> entries = new ArrayList<>(this.tags.entrySet());
+        entries.sort(Map.Entry.comparingByKey());
+        for (int i = 0, len = entries.size(); i < len; i++) {
+            if (i != 0) {
+                builder.append(',');
+            }
+            Map.Entry<String, NBT> entry = entries.get(i);
+            String key = entry.getKey();
+            // check if quotations are needed
+            if (v1215 && (key.equalsIgnoreCase("true") || key.equalsIgnoreCase("false"))
+                    || UNQUOTED_KEY_MATCH.matcher(key).matches()) {
+                // can be added with quotations
+                builder.append(key);
+            } else {
+                builder.append(NBTString.quoteAndEscape(key, version));
+            }
+            builder.append(':').append(entry.getValue().toSnbtString(version));
+        }
+        return builder.append('}').toString();
     }
 
     @Override

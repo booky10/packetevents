@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public class NBTEnd extends NBT {
 
     public static final NBTEnd INSTANCE = new NBTEnd();
@@ -46,6 +48,11 @@ public class NBTEnd extends NBT {
     @Override
     public NBTEnd copy() {
         return this;
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        return "END";
     }
 
     @Override

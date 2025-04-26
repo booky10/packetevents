@@ -17,6 +17,8 @@
  */
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public class NBTShort extends NBTNumber {
 
     protected final short value;
@@ -88,6 +90,11 @@ public class NBTShort extends NBTNumber {
     @Override
     public NBTShort copy() {
         return this;
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        return this.value + "s";
     }
 
     @Override

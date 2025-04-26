@@ -19,6 +19,7 @@
 package com.github.retrooper.packetevents.test;
 
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.util.codecs.Codec;
 import com.github.retrooper.packetevents.util.codecs.CodecOps;
 import com.github.retrooper.packetevents.util.codecs.HashCodecOps;
@@ -33,6 +34,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @NullMarked
 public class CodecTest {
 
@@ -46,11 +49,12 @@ public class CodecTest {
 
     @Test
     public void testNbtCodec() {
-        // TODO confirm with vanilla
         NbtCodecOps ops1214 = new NbtCodecOps(PacketWrapper.createUniversalPacketWrapper(null, ServerVersion.V_1_21_4));
-        System.out.println(ExampleClass.CODEC.write(ops1214, ExampleClass.EXAMPLE));
+        String str1214 = ExampleClass.CODEC.write(ops1214, ExampleClass.EXAMPLE).toSnbtString(ClientVersion.V_1_21_4);
+        assertEquals("{childs:[{childs:[],count:42,name:\"...\",numbers:[I;42,42,42,42,42],objects:[{\"\":0b},{\"\":42},{\"\":[B;0B,0B,0B]}],stuff:1337s}],name:\"hello world\",numbers:[I;1234,1234,4321],objects:[{\"\":0b},{\"\":42},{\"\":[B;0B,0B,0B]}],stuff:42s}", str1214);
         NbtCodecOps ops1215 = new NbtCodecOps(PacketWrapper.createUniversalPacketWrapper(null, ServerVersion.V_1_21_5));
-        System.out.println(ExampleClass.CODEC.write(ops1215, ExampleClass.EXAMPLE));
+        String str1215 = ExampleClass.CODEC.write(ops1215, ExampleClass.EXAMPLE).toSnbtString(ClientVersion.V_1_21_5);
+        assertEquals("{childs:[{childs:[],count:42,name:\"...\",numbers:[42,42,42,42,42],objects:[{\"\":0b},{\"\":42},{\"\":[B;0B,0B,0B]}],stuff:1337s}],name:\"hello world\",numbers:[1234,1234,4321],objects:[{\"\":0b},{\"\":42},{\"\":[B;0B,0B,0B]}],stuff:42s}", str1215);
     }
 
     public static final class ExampleClass {
@@ -98,6 +102,11 @@ public class CodecTest {
             map.put("stuff", ops.createShort(example.stuff));
             map.put("childs", ops.createList(example.childs, CODEC));
             map.put("numbers", ops.createList(example.numbers, Codec.INTEGER));
+            map.put("objects", ops.createList(Arrays.asList(
+                    ops.createBoolean(false),
+                    ops.createInt(42),
+                    ops.createByteList(new byte[3])
+            )));
             return ops.createMap(map);
         }
     }

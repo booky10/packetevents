@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public class NBTDouble extends NBTNumber {
 
     protected final double value;
@@ -89,6 +91,11 @@ public class NBTDouble extends NBTNumber {
     @Override
     public NBTDouble copy() {
         return this;
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        return this.value + "d";
     }
 
     @Override

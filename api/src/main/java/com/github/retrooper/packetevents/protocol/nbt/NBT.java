@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 public abstract class NBT {
 
     public abstract NBTType<?> getType();
@@ -27,6 +29,8 @@ public abstract class NBT {
 
     @Override
     public abstract int hashCode();
+
+    public abstract String toSnbtString(ClientVersion version);
 
     @Override
     public String toString() {

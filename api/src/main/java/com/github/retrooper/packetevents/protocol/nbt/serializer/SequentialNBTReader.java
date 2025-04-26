@@ -17,11 +17,24 @@
  */
 package com.github.retrooper.packetevents.protocol.nbt.serializer;
 
-import com.github.retrooper.packetevents.protocol.nbt.*;
+import com.github.retrooper.packetevents.protocol.nbt.NBT;
+import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
+import com.github.retrooper.packetevents.protocol.nbt.NBTLimiter;
+import com.github.retrooper.packetevents.protocol.nbt.NBTList;
+import com.github.retrooper.packetevents.protocol.nbt.NBTType;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream> {
 
@@ -42,9 +55,11 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
 
         NBT nbt;
         if (type == NBTType.COMPOUND) {
-            nbt = new Compound(from, limiter, () -> {});
+            nbt = new Compound(from, limiter, () -> {
+            });
         } else if (type == NBTType.LIST) {
-            nbt = new List(from, limiter, () -> {});
+            nbt = new List(from, limiter, () -> {
+            });
         } else {
             nbt = DefaultNBTSerializer.INSTANCE.readTag(limiter, from, type);
         }
@@ -93,6 +108,11 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
 
         @Override
         public NBT copy() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String toSnbtString(ClientVersion version) {
             throw new UnsupportedOperationException();
         }
 
@@ -230,7 +250,7 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
                     ((Skippable) lastRead).skip();
                 }
 
-                if (!hasNext()) return new byte[] { 10, 0 }; // empty compound
+                if (!hasNext()) return new byte[]{10, 0}; // empty compound
 
                 try (ByteArrayOutputStream bytes = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bytes)) {
                     out.write(10); // compound type
@@ -307,6 +327,11 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
 
         @Override
         public NBT copy() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String toSnbtString(ClientVersion version) {
             throw new UnsupportedOperationException();
         }
 
@@ -417,7 +442,7 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
                     ((Skippable) lastRead).skip();
                 }
 
-                if (!hasNext()) return new byte[] { 9 };
+                if (!hasNext()) return new byte[]{9};
 
                 byte[] array = null;
                 for (int i = 0; i < remaining; i++) {
@@ -548,11 +573,11 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
 
         TAG_BINARY_READERS.put(NBTType.BYTE, (limiter, in) -> {
             limiter.increment(9);
-            return new byte[] { in.readByte() };
+            return new byte[]{in.readByte()};
         });
         TAG_BINARY_READERS.put(NBTType.SHORT, (limiter, in) -> {
             limiter.increment(10);
-            return new byte[] { in.readByte(), in.readByte() };
+            return new byte[]{in.readByte(), in.readByte()};
         });
         TAG_BINARY_READERS.put(NBTType.INT, (limiter, in) -> {
             limiter.increment(12);
@@ -691,7 +716,7 @@ public final class SequentialNBTReader implements NBTReader<NBT, DataInputStream
     private static int bytesToInt(byte[] bytes) {
         return ((bytes[0] & 0xFF) << 24) |
                 ((bytes[1] & 0xFF) << 16) |
-                ((bytes[2] & 0xFF) << 8 ) |
+                ((bytes[2] & 0xFF) << 8) |
                 ((bytes[3] & 0xFF));
     }
 

@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,6 +144,18 @@ public class NBTList<T extends NBT> extends NBT implements NBTCollection {
             newTags.add((T) tag.copy());
         }
         return new NBTList<>(type, newTags);
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        StringBuilder builder = new StringBuilder("[");
+        for (int i = 0, len = this.tags.size(); i < len; i++) {
+            if (i != 0) {
+                builder.append(',');
+            }
+            builder.append(this.tags.get(i).toSnbtString(version));
+        }
+        return builder.append(']').toString();
     }
 
     @Override

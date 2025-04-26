@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packetevents.protocol.nbt;
 
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+
 import java.util.Arrays;
 
 public class NBTIntArray extends NBT implements NBTCollection {
@@ -72,6 +74,18 @@ public class NBTIntArray extends NBT implements NBTCollection {
         int[] aint = new int[this.array.length];
         System.arraycopy(this.array, 0, aint, 0, this.array.length);
         return new NBTIntArray(aint);
+    }
+
+    @Override
+    public String toSnbtString(ClientVersion version) {
+        StringBuilder builder = new StringBuilder("[I;");
+        for (int i = 0, len = this.array.length; i < len; i++) {
+            if (i != 0) {
+                builder.append(',');
+            }
+            builder.append(this.array[i]);
+        }
+        return builder.append(']').toString();
     }
 
     @Override
