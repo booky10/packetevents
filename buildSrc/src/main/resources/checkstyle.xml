@@ -6,11 +6,16 @@
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
     <property name="haltOnException" value="false"/>
+    <property name="fileExtensions" value="java"/>
+
+    <module name="SuppressWarningsFilter"/>
+    <module name="SuppressWithPlainTextCommentFilter"/>
 
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
     </module>
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder"/>
         <module name="AvoidStarImport"/>
         <module name="OneTopLevelClass"/>
         <module name="OneStatementPerLine"/>
@@ -19,11 +24,35 @@
         <module name="NoFinalizer"/>
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
-            <property name="braceAdjustment" value="4"/>
+            <property name="braceAdjustment" value="8"/>
             <property name="caseIndent" value="4"/>
             <property name="throwsIndent" value="4"/>
             <property name="lineWrappingIndentation" value="8"/>
             <property name="arrayInitIndent" value="4"/>
+        </module>
+        <module name="NeedBraces">
+            <property name="allowSingleLineStatement" value="true"/>
+        </module>
+        <module name="LeftCurly"/>
+        <module name="RightCurly"/>
+        <module name="RequireThis">
+            <property name="validateOnlyOverlapping" value="false"/>
+        </module>
+        <module name="ArrayTrailingComma"/>
+        <module name="AvoidNoArgumentSuperConstructorCall"/>
+        <module name="ConstructorsDeclarationGrouping"/>
+        <module name="CovariantEquals"/>
+        <module name="DeclarationOrder"/>
+
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="systemout"/>
+            <property name="format" value="^.*System\.(out|err).*$"/>
+            <property name="message" value="Do not use System.out/err for logging"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="printstacktrace"/>
+            <property name="format" value="^.*\.printStackTrace\(\);$"/>
+            <property name="message" value="Do not use #printStackTrace() for printing errors"/>
         </module>
     </module>
 </module>
