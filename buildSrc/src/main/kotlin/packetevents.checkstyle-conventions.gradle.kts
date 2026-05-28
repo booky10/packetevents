@@ -5,8 +5,6 @@ plugins {
 
 configure<CheckstyleExtension> {
     configFile = rootProject.file("buildSrc/src/main/resources/checkstyle.xml")
-    // TODO version catalog
-    toolVersion = "13.4.2"
 }
 
 // checkstyle needs at least java 11
@@ -18,4 +16,9 @@ tasks.withType<Checkstyle> {
         }
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+dependencies {
+    // TODO version catalog
+    checkstyle("com.puppycrawl.tools:checkstyle:13.4.2")
 }
