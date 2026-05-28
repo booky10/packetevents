@@ -4,7 +4,8 @@ plugins {
 }
 
 configure<CheckstyleExtension> {
-    configFile = rootProject.file("buildSrc/src/main/resources/checkstyle.xml")
+    configDirectory = rootProject.file("buildSrc/src/main/resources")
+    configFile = configDirectory.map { it.file("checkstyle.xml").asFile }.get()
 }
 
 // checkstyle needs at least java 11

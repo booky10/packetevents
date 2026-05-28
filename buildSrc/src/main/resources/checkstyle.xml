@@ -14,21 +14,30 @@
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
     </module>
+    <module name="GenericWhitespace"/>
+
+    <module name="Header">
+        <property name="headerFile" value="${config.folder}/license_header.txt"/>
+        <property name="ignoreLines" value="3"/>
+    </module>
+
+    <module name="LineEnding"/>
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
+
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder"/>
-        <module name="AvoidStarImport"/>
-        <module name="OneTopLevelClass"/>
         <module name="OneStatementPerLine"/>
         <module name="MultipleVariableDeclarations"/>
-        <module name="ArrayTypeStyle"/>
         <module name="NoFinalizer"/>
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
-            <property name="braceAdjustment" value="8"/>
+            <property name="braceAdjustment" value="4"/>
             <property name="caseIndent" value="4"/>
-            <property name="throwsIndent" value="4"/>
+            <property name="throwsIndent" value="8"/>
             <property name="lineWrappingIndentation" value="8"/>
-            <property name="arrayInitIndent" value="4"/>
+            <property name="arrayInitIndent" value="8"/>
         </module>
         <module name="NeedBraces">
             <property name="allowSingleLineStatement" value="true"/>
@@ -43,6 +52,42 @@
         <module name="ConstructorsDeclarationGrouping"/>
         <module name="CovariantEquals"/>
         <module name="DeclarationOrder"/>
+
+        <module name="FinalClass"/>
+        <module name="HideUtilityClassConstructor"/>
+        <module name="OneTopLevelClass"/>
+
+        <module name="AvoidStarImport"/>
+        <module name="CustomImportOrder">
+            <property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE, STANDARD_JAVA_PACKAGE, STATIC"/>
+        </module>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+
+        <module name="ArrayTypeStyle"/>
+        <module name="AvoidEscapedUnicodeCharacters"/>
+        <module name="CommentsIndentation"/>
+        <module name="HexLiteralCase"/>
+        <module name="NumericalPrefixesInfixesSuffixesCharacterCase"/>
+        <module name="UpperEll"/>
+
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <module name="AbbreviationAsWordInName"/>
+        <module name="ConstantName"/>
+        <module name="GoogleNonConstantFieldName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="RecordComponentName"/>
+        <module name="TypeName"/>
+
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="NoLineWrap"/>
+        <module name="SingleSpaceSeparator"/>
+        <module name="WhitespaceAfter"/>
 
         <module name="RegexpSinglelineJava">
             <property name="id" value="systemout"/>
