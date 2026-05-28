@@ -4,6 +4,7 @@ import groovy.util.Node
 plugins {
     `java-library`
     `maven-publish`
+    id("packetevents.checkstyle-conventions")
 }
 
 group = rootProject.group
