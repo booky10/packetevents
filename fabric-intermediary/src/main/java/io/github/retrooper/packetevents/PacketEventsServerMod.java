@@ -20,6 +20,7 @@ package io.github.retrooper.packetevents;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
+import com.github.retrooper.packetevents.util.reflection.Reflection;
 import io.github.retrooper.packetevents.factory.fabric.FabricPacketEventsAPI;
 import io.github.retrooper.packetevents.factory.fabric.FabricPlayerManager;
 import io.github.retrooper.packetevents.factory.fabric.FabricServerManager;
@@ -27,18 +28,34 @@ import io.github.retrooper.packetevents.impl.netty.manager.player.PlayerManagerA
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import net.minecraft.SharedConstants;
+import net.minecraft.WorldVersion;
 import org.jspecify.annotations.NullMarked;
+
+import java.lang.reflect.Method;
 
 @NullMarked
 public class PacketEventsServerMod implements PreLaunchEntrypoint {
+
+    private static String getVersionId() {
+        SharedConstants.tryDetectVersion();
+        // legacy
+        Method getIdMethod = Reflection.getMethod(WorldVersion.class, "method_48018");
+        if (getIdMethod != null) {
+            try {
+                return (String) getIdMethod.invoke(SharedConstants.getCurrentVersion());
+            } catch (ReflectiveOperationException exception) {
+                throw new RuntimeException("Failed to get version id", exception);
+            }
+        }
+        // modern
+        return SharedConstants.getCurrentVersion().id();
+    }
 
     public static FabricPacketEventsAPI constructApi(String modid) {
         return new FabricPacketEventsAPI(modid, EnvType.SERVER) {
             @Override
             protected ServerManager constructServerManager() {
-                SharedConstants.tryDetectVersion();
-                String version = SharedConstants.getCurrentVersion().id();
-                return new FabricServerManager(version);
+                return new FabricServerManager(getVersionId());
             }
 
             @Override
