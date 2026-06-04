@@ -186,20 +186,32 @@ public final class AdventureSerializer implements NbtEncoder<Component>, NbtDeco
         return serializer().asNbtTag(component);
     }
 
-    public Component fromLegacy(String legacy) {
-        return this.legacy().deserializeOrNull(legacy);
+    public @Nullable Component fromLegacy(@Nullable String legacy) {
+        if (legacy == null) {
+            return null;
+        }
+        return this.legacy().deserialize(legacy);
     }
 
-    public String asLegacy(Component component) {
-        return this.legacy().serializeOrNull(component);
+    public @Nullable String asLegacy(@Nullable Component component) {
+        if (component == null) {
+            return null;
+        }
+        return this.legacy().serialize(component);
     }
 
-    public Component fromJson(String json) {
-        return this.gson().deserializeOrNull(json);
+    public @Nullable Component fromJson(@Nullable String json) {
+        if (json == null) {
+            return null;
+        }
+        return this.gson().deserialize(json);
     }
 
-    public String asJson(Component component) {
-        return this.gson().serializeOrNull(component);
+    public @Nullable String asJson(@Nullable Component component) {
+        if (component == null) {
+            return null;
+        }
+        return this.gson().serialize(component);
     }
 
     @Contract("!null -> !null")
