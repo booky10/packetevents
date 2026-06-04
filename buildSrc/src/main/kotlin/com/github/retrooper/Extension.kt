@@ -4,8 +4,10 @@ import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.kotlin.dsl.exclude
 
 fun ModuleDependency.excludeAdventure() {
+    exclude(group = "net.kyori", module = "option")
     exclude(group = "net.kyori", module = "adventure-api")
     exclude(group = "net.kyori", module = "adventure-nbt")
+    exclude(group = "net.kyori", module = "adventure-key")
     exclude(group = "net.kyori", module = "examination-api")
     exclude(group = "net.kyori", module = "examination-string")
 }

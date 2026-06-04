@@ -25,19 +25,11 @@ tasks {
         options.release = 8
     }
 
-    jar {
-        enabled = false
-    }
-
     shadowJar {
-        isEnableRelocation = false
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        archiveClassifier = null
     }
 
     assemble {
         dependsOn(shadowJar)
     }
-
-    defaultTasks("build")
 }

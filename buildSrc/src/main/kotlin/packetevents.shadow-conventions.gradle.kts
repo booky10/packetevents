@@ -1,31 +1,26 @@
 import com.github.jengelman.gradle.plugins.shadow.internal.DependencyFilter
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.gradle.kotlin.dsl.register
 
 plugins {
     java
     com.gradleup.shadow
 }
 
-val compileShadowOnly: Configuration by configurations.creating {
-    configurations.compileOnly.get().extendsFrom(this)
-}
-
 tasks {
     shadowJar {
-        configurations.add(compileShadowOnly)
-
         destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
         archiveFileName = "packetevents-${project.name}-${rootProject.ext["versionNoHash"]}.jar"
         archiveClassifier = null
 
-        relocate("net.kyori.adventure.text.serializer", "io.github.retrooper.packetevents.adventure.serializer")
+        // don't relocate parent package, would relocate class files from parent adventure dependency
+        sequenceOf("legacy", "json", "gson", "commons").forEach {
+            relocate(
+                "net.kyori.adventure.text.serializer.$it",
+                "io.github.retrooper.packetevents.adventure.serializer.$it"
+            )
+        }
         relocate("net.kyori.option", "io.github.retrooper.packetevents.adventure.option")
         relocate("org.bstats", "io.github.retrooper.packetevents.bstats")
-
-        dependencies {
-            exclude(dependency("com.google.code.gson:gson:.*"))
-        }
 
         mergeServiceFiles()
     }
@@ -68,27 +63,6 @@ tasks {
     if (project.properties.contains("no-adv")) {
         assemble {
             dependsOn("shadowNoAdventure")
-        }
-    }
-}
-
-configurations.implementation.get().extendsFrom(configurations.shadow.get())
-
-// TODO properly publish correct shadow references instead of this mess
-gradle.taskGraph.whenReady {
-    if (gradle.startParameter.taskNames.any {
-            it.contains("publish") && !it.equals(
-                "publishMods",
-                ignoreCase = true
-            )
-        }) {
-        logger.info("Adding shadow configuration to shadowJar tasks in module ${project.name}.")
-        tasks.withType<ShadowJar> {
-            dependencies {
-                project.configurations.shadow.get().resolvedConfiguration.firstLevelModuleDependencies.forEach {
-                    exclude(it)
-                }
-            }
         }
     }
 }

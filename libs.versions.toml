@@ -1,6 +1,7 @@
 [versions]
 adventure = "4.26.1"
 examination = "1.3.0"
+option = "1.1.0"
 netty = "4.1.72.Final"
 via-version = "5.8.1"
 bstats = "3.1.0"
@@ -15,6 +16,7 @@ spongeGradle = "2.3.0"
 classgraph = "4.8.184"
 checkerqual = "3.53.1"
 slf4j = "2.0.17"
+jspecify = "1.0.0"
 
 [libraries]
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
@@ -27,6 +29,7 @@ adventure-text-serializer-legacy = { group = "net.kyori", name = "adventure-text
 adventure-text-serializer-json-legacy = { group = "net.kyori", name = "adventure-text-serializer-json-legacy-impl", version.ref = "adventure" }
 adventure-text-serializer-commons = { group = "net.kyori", name = "adventure-text-serializer-commons", version.ref = "adventure" }
 adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
+option = { module = "net.kyori:option", version.ref = "option" }
 bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "bstats" }
 bstats-bungeecord = { group = "org.bstats", name = "bstats-bungeecord", version.ref = "bstats" }
 bstats-velocity = { group = "org.bstats", name = "bstats-velocity", version.ref = "bstats" }
@@ -44,10 +47,10 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 fabric-minecraft-intermediary = { module = "com.mojang:minecraft", version.ref = "fabric-minecraft-intermediary" }
 fabric-minecraft-official = { module = "com.mojang:minecraft", version.ref = "fabric-minecraft-official" }
 parchment-mappings = { module = "org.parchmentmc.data:parchment-1.21.11", version.ref = "parchment-mappings" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 [bundles]
 adventure = ["adventure-api", "adventure-nbt", "adventure-key", "adventure-examination-api", "adventure-examination-string"]
-adventure-serializers = ["adventure-text-serializer-gson", "adventure-text-serializer-json-legacy", "adventure-text-serializer-legacy"]
 
 [plugins]
 spongeGradle = { id = "org.spongepowered.gradle.plugin", version.ref = "spongeGradle" }

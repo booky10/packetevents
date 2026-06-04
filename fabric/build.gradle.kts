@@ -53,7 +53,7 @@ tasks {
 
         minecraftVersion = "1.21.11"
         loaderVersion = libs.versions.fabric.loader
-        runDir = project.layout.projectDirectory.dir("run").dir(minecraftVersion.get())
+        runDir = rootProject.layout.projectDirectory.dir("run/fabric/${minecraftVersion.get()}")
 
         javaLauncher = project.javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(25)

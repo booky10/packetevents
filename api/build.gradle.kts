@@ -1,7 +1,6 @@
 import com.github.retrooper.compression.strategy.dir.JsonBase64DataDirStrategy
 import com.github.retrooper.compression.strategy.dir.JsonRegistryCompressionDirStrategy
 import com.github.retrooper.compression.strategy.dir.JsonToNbtDirStrategy
-import com.github.retrooper.excludeAdventure
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
@@ -22,14 +21,11 @@ java {
 
 dependencies {
     compileOnlyApi(libs.bundles.adventure)
-    compileOnlyApi(libs.bundles.adventure.serializers)
-    implementation(libs.adventure.api)
-    api(project(":patch:adventure-text-serializer-gson", "shadow")) {
-        excludeAdventure()
-    }
-    api(project(":patch:adventure-text-serializer-legacy", "shadow")) {
-        excludeAdventure()
-    }
+    api(project(":patch:common", "shadow"))
+    api(project(":patch:adventure-text-serializer-gson", "shadow"))
+    api(project(":patch:adventure-text-serializer-legacy", "shadow"))
+
+    compileOnlyApi(libs.jspecify)
     compileOnly(libs.gson)
     compileOnly(libs.adventure.text.logger.slf4j)
     compileOnly(libs.checkerqual)
@@ -101,15 +97,6 @@ tasks {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
-        }
-    }
-
-    shadowJar {
-        exclude {
-            val path = it.path
-            path.startsWith("net/kyori") && !path.startsWith("net/kyori/adventure/text/serializer") && !path.startsWith(
-                "net/kyori/option"
-            )
         }
     }
 }

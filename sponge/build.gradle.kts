@@ -84,21 +84,19 @@ tasks {
     }
 }
 
-
 dependencies {
-    compileOnly(libs.netty)
-    shadow(libs.adventure.nbt) {
-        isTransitive = false
-    }
-    shadow(project(":api", "shadow")) {
+    api(project(":netty-common")) {
         excludeAdventure()
-        exclude(group = "net.kyori", module = "adventure-key")
     }
-    shadow(project(":netty-common")) {
-        excludeAdventure()
-        exclude(group = "net.kyori", module = "adventure-key")
-    }
-    compileShadowOnly(libs.bstats.sponge)
+    implementation(libs.bstats.sponge)
+
+    // other adventure modules are included in sponge by default
+    runtimeOnly(libs.adventure.nbt) { isTransitive = false }
 
     compileOnly(libs.via.version)
+}
+
+tasks.named<JavaExec>("runServer") {
+    workingDir = rootProject.layout.projectDirectory.dir("run/sponge/${spongeVersion}").asFile
+    workingDir.mkdirs()
 }

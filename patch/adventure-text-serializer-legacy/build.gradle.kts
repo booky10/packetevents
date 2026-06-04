@@ -1,21 +1,24 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.retrooper.excludeAdventure
+
 plugins {
     packetevents.`patching-conventions`
 }
 
 dependencies {
-    api(libs.adventure.text.serializer.legacy)
-    api(libs.adventure.text.serializer.commons)
-}
+    compileOnly(project(":patch:common"))
 
-tasks {
-    shadowJar {
-        dependencies {
-            exclude(dependency("net.kyori:adventure-api:.*"))
-            exclude(dependency("net.kyori:adventure-key:.*"))
-            exclude(dependency("net.kyori:adventure-nbt:.*"))
-            exclude(dependency("net.kyori:examination-api:.*"))
-            exclude(dependency("net.kyori:examination-string:.*"))
-            exclude("META-INF/services/**")
+    sequenceOf(
+        libs.adventure.text.serializer.legacy,
+    ).forEach {
+        compileOnlyApi(it)
+        runtimeOnly(it) {
+            exclude(module = "adventure-text-serializer-commons")
+            excludeAdventure()
         }
     }
+}
+
+tasks.withType<ShadowJar> {
+    exclude("META-INF/services/**")
 }
