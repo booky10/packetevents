@@ -16,6 +16,7 @@ repositories {
 }
 
 val isShadow = project.pluginManager.hasPlugin("com.gradleup.shadow")
+val library: Configuration by configurations.creating
 
 dependencies {
     compileOnly("org.jetbrains:annotations:23.0.0")
@@ -109,7 +110,7 @@ publishing {
                 artifact(project.tasks.withType<ShadowJar>().getByName("shadowJar").archiveFile)
 
                 val allDependencies = project.provider {
-                    project.configurations.getByName("shadow").allDependencies
+                    library.allDependencies
                         .filter { it is ProjectDependency || it !is FileCollectionDependency }
                 }
 
@@ -140,6 +141,7 @@ publishing {
                 }
 
                 artifact(tasks["sourcesJar"])
+                artifact(tasks["javadocJar"])
             } else {
                 from(components["java"])
             }
@@ -161,6 +163,11 @@ publishing {
                         id = "retrooper"
                         name = "Retrooper"
                         email = "retrooperdev@gmail.com"
+                    }
+                    developer {
+                        id = "booky10"
+                        name = "booky"
+                        email = "booky@booky.dev"
                     }
                 }
 

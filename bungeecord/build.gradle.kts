@@ -17,7 +17,9 @@ dependencies {
     compileOnly(libs.bungeecord)
     api(libs.bundles.adventure)
     implementation(libs.bstats.bungeecord)
+
     api(project(":netty-common"))
+    library(project(":netty-common"))
 }
 
 tasks.named<RunWaterfall>("runWaterfall") {

@@ -25,9 +25,8 @@ repositories {
 }
 
 dependencies {
-    api(libs.bundles.adventure)
-    api(project(":api"))
-    api(project(":netty-common"))
+    compileOnly(project(":api"))
+    compileOnlyApi(project(":netty-common"))
 
     compileOnly(libs.fabric.loader)
     compileOnly(libs.slf4j.api)

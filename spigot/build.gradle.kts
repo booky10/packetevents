@@ -17,6 +17,7 @@ dependencies {
     api(libs.bundles.adventure)
     implementation(libs.bstats.bukkit)
     api(project(":netty-common"))
+    library(project(":netty-common"))
 
     compileOnly(libs.paper)
     compileOnly(libs.via.version)

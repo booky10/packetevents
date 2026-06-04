@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":fabric-common"))
+    compileOnly(project(":fabric-common"))
 
     minecraft(libs.fabric.minecraft.official)
     compileOnly(libs.fabric.loader)

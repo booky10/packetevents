@@ -85,13 +85,14 @@ tasks {
 }
 
 dependencies {
+    library(project(":netty-common"))
     api(project(":netty-common")) {
         excludeAdventure()
     }
     implementation(libs.bstats.sponge)
 
     // other adventure modules are included in sponge by default
-    runtimeOnly(libs.adventure.nbt) { isTransitive = false }
+    implementation(libs.adventure.nbt) { isTransitive = false }
 
     compileOnly(libs.via.version)
 }

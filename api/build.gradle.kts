@@ -15,11 +15,8 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-java {
-    withJavadocJar()
-}
-
 dependencies {
+    library(libs.bundles.adventure)
     compileOnlyApi(libs.bundles.adventure)
     api(project(":patch:common", "shadow"))
     api(project(":patch:adventure-text-serializer-gson", "shadow"))
@@ -97,14 +94,6 @@ tasks {
         useJUnitPlatform()
         testLogging {
             exceptionFormat = TestExceptionFormat.FULL
-        }
-    }
-}
-
-publishing {
-    publications {
-        named<MavenPublication>("shadow") {
-            artifact(tasks["javadocJar"])
         }
     }
 }

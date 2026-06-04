@@ -13,11 +13,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.netty)
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
-    api(project(":netty-common"))
     implementation(libs.bstats.velocity)
+
+    api(project(":netty-common"))
+    library(project(":netty-common"))
 }
 
 tasks {

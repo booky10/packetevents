@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":fabric-common"))
+    compileOnly(project(":fabric-common"))
 
     minecraft(libs.fabric.minecraft.intermediary)
     mappings(loom.layered {
