@@ -25,7 +25,11 @@ import com.github.retrooper.packetevents.util.PEVersion;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.plugin.PluginContainer;
 
+import java.util.regex.Pattern;
+
 public class ServerManagerImpl implements ServerManager {
+
+    private static final Pattern VERSION_REGEX = Pattern.compile("^\\d+\\.\\d+(?:\\.\\d+)?$");
 
     private ServerVersion serverVersion;
 
@@ -34,16 +38,21 @@ public class ServerManagerImpl implements ServerManager {
         String minecraftRelease = Sponge.platform().minecraftVersion().name();
         ServerVersion fallbackVersion = ServerVersion.getLatest();
 
+        if (!VERSION_REGEX.matcher(minecraftRelease).matches()) {
+            plugin.logger().warn("[packetevents] Don't know how to handle Minecraft Version {}, will use latest available version {} instead", minecraftRelease, fallbackVersion);
+            return fallbackVersion;
+        }
+
         // Our PEVersion class can parse this version and detect if it is a newer version than what is currently supported
         // and account for that properly
         PEVersion version = PEVersion.fromString(minecraftRelease);
-        PEVersion latestVersion = PEVersion.fromString(ServerVersion.getLatest().getReleaseName());
+        PEVersion latestVersion = PEVersion.fromString(fallbackVersion.getReleaseName());
         if (version.isNewerThan(latestVersion)) {
             //We do not support this version yet, so let us warn the user
             plugin.logger().warn("[packetevents] We currently do not support the minecraft version {}," +
                     " so things might break. " +
-                    "PacketEvents will behave as if the minecraft version were {}!", version, latestVersion);
-            return ServerVersion.getLatest();
+                    "PacketEvents will behave as if the minecraft version were {}!", version, fallbackVersion);
+            return fallbackVersion;
         }
 
         for (final ServerVersion val : ServerVersion.reversedValues()) {
