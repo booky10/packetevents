@@ -1,0 +1,68 @@
+{
+  "configuration": {
+    "clientbound": {
+      "minecraft:disconnect": {
+        "protocol_id": 2
+      },
+      "minecraft:finish_configuration": {
+        "protocol_id": 3
+      },
+      "minecraft:keep_alive": {
+        "protocol_id": 4
+      },
+      "minecraft:ping": {
+        "protocol_id": 5
+      },
+      "minecraft:select_known_packs": {
+        "protocol_id": 15
+      }
+    },
+    "serverbound": {
+      "minecraft:finish_configuration": {
+        "protocol_id": 3
+      },
+      "minecraft:keep_alive": {
+        "protocol_id": 4
+      },
+      "minecraft:pong": {
+        "protocol_id": 5
+      },
+      "minecraft:select_known_packs": {
+        "protocol_id": 7
+      }
+    }
+  },
+  "play": {
+    "clientbound": {
+      "minecraft:disconnect": {
+        "protocol_id": 32
+      },
+      "minecraft:keep_alive": {
+        "protocol_id": 45
+      },
+      "minecraft:login": {
+        "protocol_id": 50
+      },
+      "minecraft:ping": {
+        "protocol_id": 62
+      },
+      "minecraft:player_position": {
+        "protocol_id": 73
+      }
+    },
+    "serverbound": {
+      "minecraft:accept_teleportation": {
+        "protocol_id": 0
+      },
+      "minecraft:keep_alive": {
+        "protocol_id": 28
+      },
+      "minecraft:player_loaded": {
+        "protocol_id": 44
+      },
+      "minecraft:pong": {
+        "protocol_id": 45
+      }
+    }
+  }
+}

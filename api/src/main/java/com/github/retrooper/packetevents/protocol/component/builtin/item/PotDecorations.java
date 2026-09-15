@@ -18,6 +18,9 @@
 
 package com.github.retrooper.packetevents.protocol.component.builtin.item;
 
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.item.ItemStack;
+import com.github.retrooper.packetevents.protocol.item.ItemStackSerialization;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
@@ -36,6 +39,7 @@ public class PotDecorations {
     private @Nullable ItemType left;
     private @Nullable ItemType right;
     private @Nullable ItemType front;
+    private @Nullable ItemStack backStack, leftStack, rightStack, frontStack;
 
     private PotDecorations(Queue<Optional<ItemType>> items) {
         this(
@@ -73,6 +77,14 @@ public class PotDecorations {
     }
 
     public static PotDecorations read(PacketWrapper<?> wrapper) {
+        if (wrapper.getServerVersion().isNewerThanOrEquals(ServerVersion.V_26_3)) {
+            PotDecorations decorations = new PotDecorations(null, null, null, null);
+            decorations.setBackStack(ItemStackSerialization.readOptionalTemplate(wrapper));
+            decorations.setLeftStack(ItemStackSerialization.readOptionalTemplate(wrapper));
+            decorations.setRightStack(ItemStackSerialization.readOptionalTemplate(wrapper));
+            decorations.setFrontStack(ItemStackSerialization.readOptionalTemplate(wrapper));
+            return decorations;
+        }
         Queue<Optional<ItemType>> items = wrapper.<Optional<ItemType>, Queue<Optional<ItemType>>>
                 readCollection(ArrayDeque::new, PotDecorations::readItem);
         return new PotDecorations(items);
@@ -83,6 +95,13 @@ public class PotDecorations {
     }
 
     public static void write(PacketWrapper<?> wrapper, PotDecorations decorations) {
+        if (wrapper.getServerVersion().isNewerThanOrEquals(ServerVersion.V_26_3)) {
+            ItemStackSerialization.writeOptionalTemplate(wrapper, decorations.getBackStack());
+            ItemStackSerialization.writeOptionalTemplate(wrapper, decorations.getLeftStack());
+            ItemStackSerialization.writeOptionalTemplate(wrapper, decorations.getRightStack());
+            ItemStackSerialization.writeOptionalTemplate(wrapper, decorations.getFrontStack());
+            return;
+        }
         wrapper.writeList(decorations.asList(), PotDecorations::writeItem);
     }
 
@@ -92,6 +111,7 @@ public class PotDecorations {
 
     public void setBack(@Nullable ItemType back) {
         this.back = back;
+        this.backStack = null;
     }
 
     public @Nullable ItemType getLeft() {
@@ -100,6 +120,7 @@ public class PotDecorations {
 
     public void setLeft(@Nullable ItemType left) {
         this.left = left;
+        this.leftStack = null;
     }
 
     public @Nullable ItemType getRight() {
@@ -108,6 +129,7 @@ public class PotDecorations {
 
     public void setRight(@Nullable ItemType right) {
         this.right = right;
+        this.rightStack = null;
     }
 
     public @Nullable ItemType getFront() {
@@ -116,6 +138,64 @@ public class PotDecorations {
 
     public void setFront(@Nullable ItemType front) {
         this.front = front;
+        this.frontStack = null;
+    }
+
+    private static ItemStack stack(@Nullable ItemType type, @Nullable ItemStack stack) {
+        return stack != null ? stack : type == null ? ItemStack.EMPTY : ItemStack.builder().type(type).build();
+    }
+
+    /**
+     * @versions 26.3+
+     */
+    public ItemStack getBackStack() {
+        return stack(this.back, this.backStack);
+    }
+    /**
+     * @versions 26.3+
+     */
+    public ItemStack getLeftStack() {
+        return stack(this.left, this.leftStack);
+    }
+    /**
+     * @versions 26.3+
+     */
+    public ItemStack getRightStack() {
+        return stack(this.right, this.rightStack);
+    }
+    /**
+     * @versions 26.3+
+     */
+    public ItemStack getFrontStack() {
+        return stack(this.front, this.frontStack);
+    }
+    /**
+     * @versions 26.3+
+     */
+    public void setBackStack(ItemStack stack) {
+        this.backStack = stack;
+        this.back = stack.isEmpty() ? null : stack.getType();
+    }
+    /**
+     * @versions 26.3+
+     */
+    public void setLeftStack(ItemStack stack) {
+        this.leftStack = stack;
+        this.left = stack.isEmpty() ? null : stack.getType();
+    }
+    /**
+     * @versions 26.3+
+     */
+    public void setRightStack(ItemStack stack) {
+        this.rightStack = stack;
+        this.right = stack.isEmpty() ? null : stack.getType();
+    }
+    /**
+     * @versions 26.3+
+     */
+    public void setFrontStack(ItemStack stack) {
+        this.frontStack = stack;
+        this.front = stack.isEmpty() ? null : stack.getType();
     }
 
     @Override
@@ -123,14 +203,25 @@ public class PotDecorations {
         if (this == obj) return true;
         if (!(obj instanceof PotDecorations)) return false;
         PotDecorations that = (PotDecorations) obj;
-        if (!Objects.equals(this.back, that.back)) return false;
-        if (!Objects.equals(this.left, that.left)) return false;
-        if (!Objects.equals(this.right, that.right)) return false;
-        return Objects.equals(this.front, that.front);
+        return sameTemplate(this.getBackStack(), that.getBackStack())
+                && sameTemplate(this.getLeftStack(), that.getLeftStack())
+                && sameTemplate(this.getRightStack(), that.getRightStack())
+                && sameTemplate(this.getFrontStack(), that.getFrontStack());
+    }
+
+    private static boolean sameTemplate(ItemStack first, ItemStack second) {
+        // Templates store patches, independently of lazily initialized default components.
+        return first.getType().equals(second.getType()) && first.getAmount() == second.getAmount()
+                && first.getComponents().getPatches().equals(second.getComponents().getPatches());
+    }
+
+    private static int templateHash(ItemStack stack) {
+        return Objects.hash(stack.getType(), stack.getAmount(), stack.getComponents().getPatches());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.back, this.left, this.right, this.front);
+        return Objects.hash(templateHash(this.getBackStack()), templateHash(this.getLeftStack()),
+                templateHash(this.getRightStack()), templateHash(this.getFrontStack()));
     }
 }

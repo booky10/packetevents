@@ -79,6 +79,7 @@ import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEnc
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEnchantments;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemFireworks;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemFuel;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemInstrument;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemJukeboxPlayable;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemKineticWeapon;
@@ -87,6 +88,7 @@ import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemLor
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMapDecorations;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMapPostProcessingState;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMinimumAttackCharge;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemMobVisibility;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemModel;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemPiercingWeapon;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemPotionContents;
@@ -97,6 +99,7 @@ import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemPro
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRarity;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRecipes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemRepairable;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemSignText;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemSwingAnimation;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTool;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemTooltipDisplay;
@@ -116,10 +119,11 @@ import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.util.Dummy;
+import com.github.retrooper.packetevents.util.Either;
 import com.github.retrooper.packetevents.util.mappings.VersionedRegistry;
-import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper.Reader;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper.Writer;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -576,6 +580,61 @@ public final class ComponentTypes {
     public static Collection<ComponentType<?>> values() {
         return REGISTRY.getEntries();
     }
+
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemSwingAnimation> ATTACK_ANIMATION = define("attack_animation", ItemSwingAnimation::read, ItemSwingAnimation::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemSwingAnimation> INTERACT_ANIMATION = define("interact_animation", ItemSwingAnimation::read, ItemSwingAnimation::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<Integer> BLOCK_TRANSFORMER = define("block_transformer", PacketWrapper::readVarInt, PacketWrapper::writeVarInt);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<Integer> PROVIDES_POTTERY_PATTERN = define("provides_pottery_pattern", PacketWrapper::readVarInt, PacketWrapper::writeVarInt);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<Integer> VILLAGER_FOOD = define("villager_food", PacketWrapper::readVarInt, PacketWrapper::writeVarInt);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<Either<Integer, ResourceLocation>> COMPOSTABLE = define("compostable",
+            wrapper -> wrapper.readEither(PacketWrapper::readInt, PacketWrapper::readIdentifier),
+            (wrapper, value) -> wrapper.writeEither(value, PacketWrapper::writeInt, PacketWrapper::writeIdentifier));
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemFuel> COOKING_FUEL = define("cooking_fuel", ItemFuel::read, ItemFuel::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemFuel> BREWING_FUEL = define("brewing_fuel", ItemFuel::read, ItemFuel::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemMobVisibility> MOB_VISIBILITY = define("mob_visibility", ItemMobVisibility::read, ItemMobVisibility::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemSignText> SIGN_TEXT_FRONT = define("sign_text_front", ItemSignText::read, ItemSignText::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<ItemSignText> SIGN_TEXT_BACK = define("sign_text_back", ItemSignText::read, ItemSignText::write);
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<Dummy> WAXED = define("waxed", wrapper -> Dummy.DUMMY, (wrapper, value) -> {});
+    /**
+     * @versions 26.3+
+     */
+    public static final ComponentType<DyeColor> CUSHION_COLOR = define("cushion/color", DyeColor::read, DyeColor::write);
 
     static {
         REGISTRY.unloadMappings();

@@ -107,6 +107,25 @@ public final class EnvironmentAttributes {
     public static final EnvironmentAttribute<?> GAMEPLAY_BED_RULE = defineUnsynced("gameplay/bed_rule");
     /**
      * Not synced via network, not usable via packetevents.
+     * @versions 26.3+
+     */
+    @ApiStatus.Obsolete
+    public static final EnvironmentAttribute<?> GAMEPLAY_STRAW_BED_RULE = defineUnsynced("gameplay/straw_bed_rule");
+    /**
+     * Not synced via network, not usable via packetevents.
+     * @versions 26.3+
+     */
+    @ApiStatus.Obsolete
+    public static final EnvironmentAttribute<?> GAMEPLAY_NATURAL_MOB_SPAWNS = defineUnsynced("gameplay/natural_mob_spawns");
+    /**
+     * Not synced via network, not usable via packetevents.
+     * @versions 26.3+
+     */
+    @ApiStatus.Obsolete
+    public static final EnvironmentAttribute<Float> GAMEPLAY_CREATURE_WORLD_GEN_SPAWN_PROBABILITY =
+            defineUnsynced("gameplay/creature_world_gen_spawn_probability", AttributeTypes.FLOAT, 0.1f);
+    /**
+     * Not synced via network, not usable via packetevents.
      */
     @ApiStatus.Obsolete
     public static final EnvironmentAttribute<Boolean> GAMEPLAY_RESPAWN_ANCHOR_WORKS = defineUnsynced("gameplay/respawn_anchor_works", AttributeTypes.BOOLEAN, false);

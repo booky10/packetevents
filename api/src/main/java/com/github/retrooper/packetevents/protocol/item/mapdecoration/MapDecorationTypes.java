@@ -173,6 +173,13 @@ public final class MapDecorationTypes {
         return REGISTRY.getEntries();
     }
 
+    // Added with 26.3
+    public static final MapDecorationType ABANDONED_CAMP = define("abandoned_camp", true, false);
+    public static final MapDecorationType ANCIENT_CITY = define("ancient_city", true, false);
+    public static final MapDecorationType DESERT_PYRAMID = define("desert_pyramid", true, false);
+    public static final MapDecorationType MINESHAFT = define("mineshaft", true, false);
+    public static final MapDecorationType OCEAN_RUIN_WARM = define("ocean_ruin_warm", minecraft("warm_ocean_ruins"), true, false);
+
     static {
         REGISTRY.unloadMappings();
     }

@@ -102,6 +102,8 @@ public interface AttributeModifier<T, A> {
         NOR("nor"),
         XOR("xor"),
         XNOR("xnor"),
+        APPEND("append"),
+        OVERLAY("overlay"),
         ;
 
         public static final NbtCodec<Operation> CODEC = NbtCodecs.forEnum(values());

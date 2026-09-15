@@ -22,6 +22,7 @@ import com.github.retrooper.packetevents.protocol.item.armormaterial.ArmorMateri
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.mapper.AbstractMappedEntity;
+import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.util.mappings.TypesBuilderData;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
@@ -39,6 +40,13 @@ public class StaticTrimMaterial extends AbstractMappedEntity implements TrimMate
     private final float itemModelIndex;
     private final Map<ArmorMaterial, String> overrideArmorMaterials;
     private final Component description;
+
+    /**
+     * @versions 26.3+
+     */
+    public StaticTrimMaterial(ResourceLocation paletteId, Component description) {
+        this(paletteId.toString(), null, java.util.Collections.emptyMap(), description);
+    }
 
     public StaticTrimMaterial(
             String assetName, @Nullable ItemType ingredient,

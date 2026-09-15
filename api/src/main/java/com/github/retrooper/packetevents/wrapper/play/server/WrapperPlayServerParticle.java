@@ -40,6 +40,10 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
     private Vector3d position;
     private Vector3f offset;
     private float maxSpeed;
+    private float maxSpeedY;
+    private float maxSpeedZ;
+    private RandomizationType randomizationType;
+    private static final RandomizationType[] RANDOMIZATION_TYPES = RandomizationType.values();
     private int particleCount;
     /**
      * Added with 1.21.4
@@ -66,9 +70,10 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
         this.longDistance = longDistance;
         this.position = position;
         this.offset = offset;
-        this.maxSpeed = maxSpeed;
+        setMaxSpeed(maxSpeed);
         this.particleCount = particleCount;
         this.alwaysShow = alwaysShow;
+        this.randomizationType = RandomizationType.DEFAULT;
     }
 
     @SuppressWarnings("unchecked")
@@ -84,6 +89,7 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
             particleTypeId = serverVersion.isNewerThanOrEquals(ServerVersion.V_1_19) ? readVarInt() : readInt();
             particleType = ParticleTypes.getById(serverVersion.toClientVersion(), particleTypeId);
         }
+        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_26_3)) this.particle = Particle.read(this);
         longDistance = readBoolean();
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_4)) {
             this.alwaysShow = this.readBoolean();
@@ -95,6 +101,15 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
         }
         offset = new Vector3f(readFloat(), readFloat(), readFloat());
         maxSpeed = readFloat();
+        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_26_3)) {
+            maxSpeedY = readFloat();
+            maxSpeedZ = readFloat();
+            particleCount = readVarInt();
+            randomizationType = readEnum(RANDOMIZATION_TYPES, RandomizationType.DEFAULT);
+            return;
+        }
+        maxSpeedY = maxSpeedZ = maxSpeed;
+        randomizationType = RandomizationType.DEFAULT;
         particleCount = readInt();
 
         if (v1205) {
@@ -128,6 +143,7 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
                 writeInt(id);
             }
         }
+        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_26_3)) Particle.write(this, this.particle);
         writeBoolean(longDistance);
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_21_4)) {
             this.writeBoolean(this.alwaysShow);
@@ -145,6 +161,13 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
         writeFloat(offset.getY());
         writeFloat(offset.getZ());
         writeFloat(maxSpeed);
+        if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_26_3)) {
+            writeFloat(maxSpeedY);
+            writeFloat(maxSpeedZ);
+            writeVarInt(particleCount);
+            writeEnum(randomizationType);
+            return;
+        }
         writeInt(particleCount);
 
         if (this.serverVersion.isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
@@ -167,6 +190,9 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
         this.position = wrapper.position;
         this.offset = wrapper.offset;
         this.maxSpeed = wrapper.maxSpeed;
+        this.maxSpeedY = wrapper.maxSpeedY;
+        this.maxSpeedZ = wrapper.maxSpeedZ;
+        this.randomizationType = wrapper.randomizationType;
         this.particleCount = wrapper.particleCount;
         this.alwaysShow = wrapper.alwaysShow;
     }
@@ -208,7 +234,7 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
     }
 
     public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
+        this.maxSpeed = this.maxSpeedY = this.maxSpeedZ = maxSpeed;
     }
 
     public int getParticleCount() {
@@ -232,4 +258,14 @@ public class WrapperPlayServerParticle extends PacketWrapper<WrapperPlayServerPa
     public void setAlwaysShow(boolean alwaysShow) {
         this.alwaysShow = alwaysShow;
     }
+    /** @versions 26.3+ */
+    public Vector3f getMaxSpeeds() { return new Vector3f(maxSpeed, maxSpeedY, maxSpeedZ); }
+    /** @versions 26.3+ */
+    public void setMaxSpeeds(Vector3f speeds) { maxSpeed = speeds.getX(); maxSpeedY = speeds.getY(); maxSpeedZ = speeds.getZ(); }
+    /** @versions 26.3+ */
+    public RandomizationType getRandomizationType() { return randomizationType; }
+    /** @versions 26.3+ */
+    public void setRandomizationType(RandomizationType type) { randomizationType = type; }
+
+    public enum RandomizationType { DEFAULT, ALTERNATIVE, ALTERNATIVE_WITH_SPEED }
 }

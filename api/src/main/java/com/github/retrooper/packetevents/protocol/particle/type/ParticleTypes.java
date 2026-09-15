@@ -367,6 +367,19 @@ public final class ParticleTypes {
         return REGISTRY.getEntries();
     }
 
+    /**
+     * @versions 26.3+
+     */
+    public static final ParticleType<ParticleData> RED_POPLAR_LEAVES = define("red_poplar_leaves");
+    /**
+     * @versions 26.3+
+     */
+    public static final ParticleType<ParticleData> ORANGE_POPLAR_LEAVES = define("orange_poplar_leaves");
+    /**
+     * @versions 26.3+
+     */
+    public static final ParticleType<ParticleData> YELLOW_POPLAR_LEAVES = define("yellow_poplar_leaves");
+
     static {
         REGISTRY.unloadMappings();
     }

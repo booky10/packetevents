@@ -440,6 +440,19 @@ public final class EntityTypes {
         return REGISTRY.getEntries();
     }
 
+    /**
+     * @versions 26.3+
+     */
+    public static final EntityType CUSHION = define("cushion", ENTITY);
+    /**
+     * @versions 26.3+
+     */
+    public static final EntityType POPLAR_BOAT = define("poplar_boat", BOAT);
+    /**
+     * @versions 26.3+
+     */
+    public static final EntityType POPLAR_CHEST_BOAT = define("poplar_chest_boat", CHEST_BOAT);
+
     static {
         REGISTRY.unloadMappings();
         LEGACY_SPAWN_REGISTRY.unloadMappings();

@@ -1226,5 +1226,28 @@
       },
       "minecraft:visual/sky_color": "#6eb1ff"
     }
+  },
+  "minecraft:dappled_forest": {
+    "has_precipitation": 1,
+    "temperature": 0.6,
+    "downfall": 0.6,
+    "attributes": {
+      "minecraft:visual/fog_color": "#ccd8e2",
+      "minecraft:visual/sky_color": "#7ca3ff",
+      "minecraft:visual/water_fog_color": "#375154",
+      "minecraft:audio/background_music": {
+        "default": {
+          "sound": "minecraft:music.overworld.forest",
+          "min_delay": 12000,
+          "max_delay": 24000
+        }
+      }
+    },
+    "effects": {
+      "water_color": "#375154",
+      "foliage_color": "#e68e30",
+      "dry_foliage_color": "#8c3a04",
+      "grass_color": "#df6827"
+    }
   }
 }

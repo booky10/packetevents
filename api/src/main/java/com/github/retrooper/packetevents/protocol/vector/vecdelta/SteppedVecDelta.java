@@ -23,6 +23,7 @@ import com.github.retrooper.packetevents.protocol.vector.positionpath.PositionPa
 import com.github.retrooper.packetevents.protocol.vector.positionpath.SteppedPositionPath;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import com.github.retrooper.packetevents.netty.buffer.ByteBufHelper;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public final class SteppedVecDelta implements VecDelta {
     }
 
     public static SteppedVecDelta read(PacketWrapper<?> wrapper, int stepCount) {
+        if (stepCount < 0 || stepCount > ByteBufHelper.readableBytes(wrapper.getBuffer()) / 7) {
+            throw new IllegalArgumentException("Invalid movement step count: " + stepCount);
+        }
         List<DeltaStep> steps = new ArrayList<>(stepCount);
         for (int i = 0; i < stepCount; i++) {
             steps.add(DeltaStep.read(wrapper));
