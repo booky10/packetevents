@@ -25,7 +25,7 @@ public class ItemCompostable {
     }
 
     public static void write(PacketWrapper<?> wrapper, ItemCompostable compostable) {
-        ResolvableInt.write(wrapper, compostable);
+        ResolvableInt.write(wrapper, compostable.getLayers());
     }
 
     public ResolvableInt getLayers() {
