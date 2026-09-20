@@ -171,8 +171,8 @@ public class PacketEventsEncoder extends ChannelOutboundHandlerAdapter {
         boolean didWeCauseThis = ExceptionUtil.isException(cause, PacketProcessException.class);
         if (didWeCauseThis
                 && (user == null || user.getEncoderState() != ConnectionState.HANDSHAKING)) {
-            if (!SpigotReflectionUtil.isMinecraftServerInstanceDebugging()) {
-                if (PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
+            if (true || !SpigotReflectionUtil.isMinecraftServerInstanceDebugging()) {
+                if (true || PacketEvents.getAPI().getSettings().isFullStackTraceEnabled()) {
                     cause.printStackTrace();
                 } else {
                     PacketEvents.getAPI().getLogManager().warn(cause.getMessage());
